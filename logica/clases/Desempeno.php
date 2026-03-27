@@ -1,0 +1,161 @@
+<?php
+
+class Desempeno
+{
+    private $id;
+    private $logro;
+    private $tipo;
+    private $peso;
+    private $evaluador;
+    private $evidencia;
+    private $calificacion;
+    private $rango;
+    private $idDesempeno;
+
+
+    public function __construct($campo, $valor)
+    {
+        if ($campo != null) {
+            if (!is_array($campo)) {
+                $cadenaSQL = "select id, logro, tipo, peso, evaluador, evidencia, calificacion, rango, idDesempeno from desempeno where $campo= $valor";
+                $campo = ConectorBD::ejecutaryQuery($cadenaSQL)[0];
+            }
+            $this->id = $campo['id'];
+            $this->logro = $campo['logro'];
+            $this->tipo = $campo['tipo'];
+            $this->peso = $campo['peso'];
+            $this->evaluador = $campo['evaluador'];
+            $this->evidencia = $campo['evidencia'];
+            $this->calificacion = $campo['calificacion'];
+            $this->rango = $campo['rango'];
+            $this->idDesempeno = $campo['idDesempeno'];
+        }
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+    public function getLogro()
+    {
+        return $this->logro;
+    }
+    public function getTipo()
+    {
+        return $this->tipo;
+    }
+    public function getPeso()
+    {
+        return $this->peso;
+    }
+    public function getEvaluador()
+    {
+        return $this->evaluador;
+    }
+    public function getEvidencia()
+    {
+        return $this->evidencia;
+    }
+    public function getCalificacion()
+    {
+        return $this->calificacion;
+    }
+    public function getRango()
+    {
+        return $this->rango;
+    }
+    public function getIdDesempeno()
+    {
+        return $this->idDesempeno;
+    }
+
+    public function setId($id): void
+    {
+        $this->id = $id;
+    }
+    public function setLogro($logro): void
+    {
+        $this->logro = $logro;
+    }
+    public function setTipo($tipo): void
+    {
+        $this->tipo = $tipo;
+    }
+    public function setPeso($peso): void
+    {
+        $this->peso = $peso;
+    }
+    public function setEvaluador($evaluador): void
+    {
+        $this->evaluador = $evaluador;
+    }
+    public function setEvidencia($evidencia): void
+    {
+        $this->evidencia = $evidencia;
+    }
+    public function setCalificacion($calificacion): void
+    {
+        $this->calificacion = $calificacion;
+    }
+    public function setRango($rango): void
+    {
+        $this->rango = $rango;
+    }
+    
+    public function setIdDesempeno($idDesempeno): void
+    {
+        $this->idDesempeno = $idDesempeno;
+    }
+
+    public function getPersona()
+    {
+        return new Persona('identificacion', $this->idDesempeno);
+    }
+
+    public function guardar()
+    {
+        $cadenaSQL = "insert into desempeno(logro, tipo, peso, evaluador, evidencia, calificacion, rango, idDesempeno) values ('$this->logro','$this->tipo','$this->peso','$this->evaluador','$this->evidencia', $this->calificacion, '$this->rango' , '$this->idDesempeno')";
+        //echo $cadenaSQL;
+        ConectorBD::ejecutaryQuery($cadenaSQL);
+    }
+    public function modificar()
+    {
+        $cadenaSQL = "update desempeno set logro='$this->logro',tipo='$this->tipo',peso='$this->peso',evaluador='$this->evaluador',evidencia='$this->evidencia',calificacion='$this->calificacion',rango='$this->rango', idDesempeno ='$this->idDesempeno' where id='$this->id'";
+        //echo $cadenaSQL;
+        ConectorBD::ejecutaryQuery($cadenaSQL);
+    }
+    public function eliminar()
+    {
+        $cadenaSQL = "delete from desempeno where id='$this->id'";
+        ConectorBD::ejecutaryQuery($cadenaSQL);
+    }
+
+    /*
+    public function modificarEvaluador($id)
+    {
+        $cadenaSQL = "update desempeno set idPersonaJefe='$this->idPersonaJefe', idPersonaPar='$this->idPersonaPar' where idDesempeno='$id'";
+        echo $cadenaSQL;
+        //ConectorBD::ejecutaryQuery($cadenaSQL);
+    }
+    */
+
+    public static function getLista($filtro, $orden)
+    {
+        if ($filtro == null || $filtro == '') $filtro = '';
+        else $filtro = "where $filtro";
+        if ($orden == null || $orden == '') $orden = '';
+        else $orden = "order by $orden";
+        $cadenaSQL = "select desempeno.id, logro, desempeno.tipo, peso, evaluador, evidencia, calificacion, rango, idDesempeno from desempeno INNER JOIN persona on persona.identificacion = idDesempeno $filtro $orden";
+        return ConectorBD::ejecutaryQuery($cadenaSQL);
+    }
+    public static function getLIstaEnObjetos($filtro, $orden)
+    {
+        $resultado = Desempeno::getLista($filtro, $orden);
+        $lista = array();
+        for ($i = 0; $i < count($resultado); $i++) {
+            $desempeno = new Desempeno($resultado[$i], null);
+            $lista[$i] = $desempeno;
+        }
+        return $lista;
+    }
+}

@@ -1,0 +1,292 @@
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+body {
+  width: 100%;
+  
+  background: rgb(174,233,238);
+background: radial-gradient(circle, rgba(174,233,238,1) 0%, rgba(0,117,255,1) 100%);
+
+  
+  background-attachment: fixed;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  
+}
+ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+@media (max-width: 991px) {
+  .menu {
+      width: 256px;
+  }
+}
+.menu ol {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+@media (max-width: 991px) {
+  .menu ol {
+      grid-template-columns: 1fr;
+  }
+}
+.menu ol li {
+  position: relative;
+}
+
+/*esto son los cuadros el css*/
+.menu ol li a {
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1em 0;
+  background: #2a98e9;
+  color: #fff;
+  position: relative;
+  z-index: 100;
+  overflow: hidden;
+  transition: background-color 100ms ease, box-shadow 150ms ease;
+  transition-timing-function: cubic-bezier(0.57, 0.21, 0.69, 3.25);
+  font-size: 33px;
+}
+
+/*tamaño de iconos*/
+.menu ol li a i {
+  display: block;
+  font-size: 125px;
+  transform: translateY(25px);
+  transition: transform 400ms ease;
+  transition: 0.4s cubic-bezier(0.94, 1.6, 0.5, 1);
+}
+.menu ol li a span {
+  display: block;
+  margin-top: .2em;
+  transition: transform 300ms ease, opacity 150ms ease;
+  transition: 0.35s cubic-bezier(0.54, 1.6, 0.5, 1);
+  transform: translateY(70px);
+  opacity: 0;
+}
+.menu ol li a.home {
+  background-color: #007AF3;
+
+}
+
+.menu ol li a.widgets {
+  background-color: #3AAA35;
+  
+}
+.menu ol li a.kabobs {
+  background-color: #AEC90B;
+  
+}
+.menu ol li a.about {
+  background-color: #007AF3;
+}
+.menu ol li a.contact {
+  background-color: #3AAA35;
+  ;
+}
+
+.menu ol li a.widgets::before, .menu ol li a.kabobs::before {
+  content: "";
+  display: block;
+  width: 0px;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 15px solid #9fdfff;
+  transition: transform 700ms ease, opacity 900ms ease;
+  transition: 0.35s cubic-bezier(0.54, 1.6, 0.5, 1);
+  position: absolute;
+  bottom: 0;
+}
+@media (max-width: 991px) {
+  .menu ol li a.widgets::before, .menu ol li a.kabobs::before {
+      border-top: 15px solid transparent;
+      border-bottom: 15px solid transparent;
+      border-right: 15px solid #9fdfff;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+  }
+}
+.menu ol li a:hover {
+  background: #fff;
+  color: #9fdfff;
+  box-shadow: inset 4px -4px 0 4px #9fdfff;
+}
+@media (max-width: 991px) {
+  .menu ol li a:hover {
+      box-shadow: inset -4px 4px 0 4px #9fdfff !important;
+  }
+}
+.menu ol li a:hover span, .menu ol li a:hover i {
+  transform: translateY(0);
+  opacity: 1;
+  color: #1a8fe7;
+  background: linear-gradient(45deg, #9fdfff, #1a8fe7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+@media (max-width: 991px) {
+  .menu ol li a:hover::before {
+      border-top-width: 450px;
+      border-bottom-width: 450px;
+      border-right-width: 450px;
+      opacity: 0;
+  }
+}
+@media (min-width: 992px) {
+  .menu ol li a:hover::before {
+      border-left-width: 450px;
+      border-right-width: 450px;
+      border-bottom-width: 450px;
+      opacity: 0;
+  }
+}
+.menu ol li .sub-menu {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  width: 120%;
+  transform: translateY(-300px);
+  transition: transform 150ms ease;
+  transition: 0.2s cubic-bezier(0.94, 1.6, 0.5, 1);
+}
+@media (max-width: 991px) {
+  .menu ol li .sub-menu {
+      transform: translate(-20%, -234px);
+  }
+}
+.menu ol li .sub-menu .menu-item a {
+  background: #9fdfff;
+  font-size: 18px;
+  font-weight: 500;
+  height: 90px;
+  align-items: flex-start;
+  padding-left: 1.4em;
+  transition: all 110ms ease;
+  transition: 0.2s cubic-bezier(0.57, 0.21, 0.69, 3.25);
+}
+@media (max-width: 991px) {
+  .menu ol li .sub-menu .menu-item a {
+      border: 7px solid transparent;
+      border-left: 0;
+      border-bottom: 0;
+  }
+}
+@media (min-width: 992px) {
+  .menu ol li .sub-menu .menu-item a {
+      border: 7px solid transparent;
+      border-top: 0;
+      border-right: 0;
+  }
+}
+.menu ol li .sub-menu .menu-item a span {
+  transform: translateY(0);
+  opacity: 1;
+}
+.menu ol li .sub-menu .menu-item a.item--b {
+  background: #aee4ff;
+}
+.menu ol li .sub-menu .menu-item a.item--c {
+  background: #c3ebff;
+}
+.menu ol li .sub-menu .menu-item a:hover {
+  background: #fff;
+  padding-left: 1.8em;
+  box-shadow: inset 4px -4px 0 4px #9fdfff;
+  border-color: #f1f1f1;
+}
+@media (max-width: 991px) {
+  .menu ol li .sub-menu .menu-item a:hover {
+      box-shadow: inset -4px 4px 0 4px #9fdfff;
+  }
+}
+.menu ol li .sub-menu .menu-item a:hover span {
+  color: #1a8fe7;
+  background: linear-gradient(45deg, #9fdfff, #1a8fe7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.menu ol li:hover .sub-menu {
+  transform: translateY(0);
+  z-index: 99;
+}
+@media (max-width: 991px) {
+  .menu ol li:hover .sub-menu {
+      transform: translate(256px, -234px);
+  }
+}
+
+.card{
+  min-height: 50px;
+  padding: 25px;
+  box-shadow: 0px 5px 10px -6px black;
+  background-color: rgb(253, 253, 253);
+  min-width: 100%;
+}
+
+
+.result-data{
+  position: relative;
+  width: 250px;
+  background-color: #dbf2e3;
+  height: auto;
+  border-radius: 0px 20px 20px 2px;
+  text-align: center;
+  padding: 2em;
+  margin: 5em;
+}
+
+.result-data .data-full{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.result-data p{
+  margin: 0;
+  padding: 0;
+  font-weight: 100;
+}
+
+.result-data p.data-cumplir{
+  position: absolute;
+  right: 10px;
+  bottom: 0;
+}
+
+.result-data i{
+  margin-left: 20px;
+  font-size: 3em;
+}
+
+.border-red{
+  border-left: red 2em solid;
+}
+
+.border-yellow{
+  border-left: yellow 2em solid;
+}
+
+.border-green{
+  border-left: green 2em solid;
+}
+
+.result-data span{
+  font-size: 25px;
+  font-weight: 900;
+}

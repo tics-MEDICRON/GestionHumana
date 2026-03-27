@@ -1,0 +1,33 @@
+# Archivos de usuarios
+
+/presentacion/contrato/documentos/
+/presentacion/evaluacion/documentos/
+/presentacion/historial/documentos/
+/presentacion/hojaDeVida/documentos/
+/presentacion/hojaDeVida/fotos/
+/presentacion/Novedades/documentos/
+
+
+# Base de datos / backups
+
+
+*.sql
+
+# Archivos del sistema
+
+Thumbs.db
+.DS_Store
+
+
+# Configuración sensible
+
+.env
+config.php
+conexion.php
+configuración_.ini
+configuración.ini
+
+
+# Logs
+
+*.log
