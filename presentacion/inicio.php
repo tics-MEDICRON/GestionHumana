@@ -4,7 +4,7 @@
   <h1>KIT DE HERRAMIENTAS DE GESTIÓN HUMANA</h1>
 </center>
 </br>
-<center></center>
+<center>esta es la vercion de prueba</center>
 <center>
   <h2>BIENVENID@</h2>
 </center>

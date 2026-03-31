@@ -1,6 +1,5 @@
-<!DOCTYPE html>
-
 <?php
+ob_start();
 require_once 'logica/clasesGenericas/ConectorBD.php';
 require_once 'logica/clases/Persona.php';
 require_once 'logica/clases/TipoPersona.php';
@@ -21,23 +20,22 @@ require_once 'logica/clases/HistoriaPrueba.php';
 require_once 'logica/clases/Familiar.php';
 require_once 'logica/clases/Conducta.php';
 require_once 'logica/clases/Contrato.php';
+require_once 'logica/clases/TipoDocumentoColaborador.php';
+require_once 'logica/clases/DocumentoColaborador.php';
 require_once 'logica/clasesGenericas/Fecha.php';
 require_once 'librerias/dompdf/autoload.inc.php';
-
-//require_once 'librerias/fpdf.php';
-
-
 
 date_default_timezone_set('America/Bogota');
 session_start();
 if (!isset($_SESSION['usuario'])) header('location: index.php?mensaje=Acceso no autorizado');
 $USUARIO = unserialize($_SESSION['usuario']);
 $filtro = '';
-foreach ($_POST as $key => $value)
+foreach ($_POST as $key => $value) {
     ${$key} = $value;
+}
 ?>
 
-
+<!DOCTYPE html>
 
 <html>
 
@@ -49,7 +47,6 @@ foreach ($_POST as $key => $value)
     <link rel="stylesheet" href="https://anandchowdhary.github.io/ionicons-3-cdn/icons.css" integrity="sha384-+iqgM+tGle5wS+uPwXzIjZS5v6VkqCUV7YQ/e/clzRHAxYbzpUJ+nldylmtBWCP0" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
     <script src="presentacion/js/menu.js"></script>
-
 </head>
 
 <body>
@@ -68,35 +65,38 @@ foreach ($_POST as $key => $value)
                     <li class="menu-item">
                         <a href="#0" class="widgets">
                             <i class="ion ion-md-analytics"></i>
-                            <span>DESEMPEÑO</span>
+                            <span>GESTION DE DESEMPENO</span>
                             <div class="dots"></div>
                         </a>
                         <ol class="sub-menu">
-                            <li class="menu-item item--a"><a href="principal.php?CONTENIDO=presentacion/usuarios/usuarios.php" class="item--a"><span>Ejecución evalucion de desempeño</span></a></li>
-                            <li class="menu-item item--b"><a href="principal.php?CONTENIDO=presentacion/evaluacion/historialEvaluacion.php" class="item--b"><span>Historial de evaluaciones de desempeño</span></a></li>
+                            <li class="menu-item item--a"><a href="principal.php?CONTENIDO=presentacion/usuarios/usuarios.php" class="item--a"><span>Ejecucion evaluacion de desempeno</span></a></li>
+                            <li class="menu-item item--b"><a href="principal.php?CONTENIDO=presentacion/evaluacion/historialEvaluacion.php" class="item--b"><span>Historial de evaluaciones de desempeno</span></a></li>
                         </ol>
                     </li>
                     <li class="menu-item">
                         <a href="#0" class="kabobs">
                             <i class="ion ion-md-document"></i>
-
-                            <span>HOJA DE VIDA </span>
+                            <span>VINCULACION E INCORPORACION</span>
+                            <div class="dots"></div>
                         </a>
                         <ol class="sub-menu">
-                            <li class="menu-item"><a href="principal.php?CONTENIDO=presentacion/hojaDeVida/usuariosHojaVida.php" class="item--a"><span>Diligenciar hoja de vida</span></a></li>
-                            <li class="menu-item"><a href="principal.php?CONTENIDO=presentacion/contrato/historialContrato.php" class="item--b"><span>Contrato Laboral</span></a></li>
-                            <li class="menu-item"><a href="principal.php?CONTENIDO=presentacion/historial/historialSarlaft.php" class="item--b"><span>Certificado de Sarlaft</span></a></li>
-                            <li class="menu-item"><a href="principal.php?CONTENIDO=presentacion/Novedades/novedades.php" class="item--c"><span>Novedades</span></a></li>
+                            <li class="menu-item item--a"><a href="principal.php?CONTENIDO=presentacion/hojaDeVida/usuariosHojaVida.php" class="item--a"><span>Diligenciar hoja de vida</span></a></li>
+                            <li class="menu-item item--b"><a href="principal.php?CONTENIDO=presentacion/contrato/historialContrato.php" class="item--b"><span>Contrato laboral</span></a></li>
+                            <li class="menu-item item--c"><a href="principal.php?CONTENIDO=presentacion/historial/historialSarlaft.php" class="item--c"><span>Certificado de Sarlaft</span></a></li>
+                            <li class="menu-item item--d"><a href="principal.php?CONTENIDO=presentacion/sst/usuariosDocumentos.php&grupo=formatos" class="item--d"><span>Formatos de inducción</span></a></li>
+                            <li class="menu-item item--e"><a href="principal.php?CONTENIDO=presentacion/Novedades/novedades.php" class="item--e"><span>Novedades</span></a></li>
                         </ol>
                     </li>
-
                     <li class="menu-item">
-                        <a href="" class="about">
-                            <i class="ion ion-md-"></i>
-                            <span></span>
-
+                        <a href="#0" class="about">
+                            <i class="ion ion-md-folder-open"></i>
+                            <span>SST</span>
+                            <div class="dots"></div>
                         </a>
-
+                        <ol class="sub-menu">
+                            <li class="menu-item item--a"><a href="principal.php?CONTENIDO=presentacion/sst/usuariosDocumentos.php&grupo=examenes" class="item--a"><span>Examenes ocupacionales</span></a></li>
+                            <li class="menu-item item--b"><a href="principal.php?CONTENIDO=presentacion/sst/usuariosDocumentos.php&grupo=vacunas" class="item--b"><span>Vacunas</span></a></li>
+                        </ol>
                     </li>
                     <li class="menu-item">
                         <a href="index.php" class="contact">
@@ -121,38 +121,39 @@ foreach ($_POST as $key => $value)
                     <li class="menu-item">
                         <a href="#0" class="widgets">
                             <i class="ion ion-md-analytics"></i>
-                            <span>DESEMPEÑO</span>
+                            <span>DESEMPENO</span>
                             <div class="dots"></div>
                         </a>
                         <ol class="sub-menu">
-                        <li class="menu-item item--a"><a href="principal.php?CONTENIDO=presentacion/usuarios/usuarios.php" class="item--a"><span>Ejecución evalucion de desempeño</span></a></li>
-                            <li class="menu-item item--b"><a href="principal.php?CONTENIDO=presentacion/evaluacion/historialEvaluacion.php" class="item--b"><span>Historial de evaluaciones de desempeño</span></a></li>
-
+                            <li class="menu-item item--a"><a href="principal.php?CONTENIDO=presentacion/usuarios/usuarios.php" class="item--a"><span>Ejecucion evaluacion de desempeno</span></a></li>
+                            <li class="menu-item item--b"><a href="principal.php?CONTENIDO=presentacion/evaluacion/historialEvaluacion.php" class="item--b"><span>Historial de evaluaciones de desempeno</span></a></li>
                         </ol>
                     </li>
                     <li class="menu-item">
                         <a href="#0" class="kabobs">
                             <i class="ion ion-md-document"></i>
-
-                            <span>HOJA DE VIDA </span>
+                            <span>VINCULACION E INCORPORACION</span>
+                            <div class="dots"></div>
                         </a>
                         <ol class="sub-menu">
-                            <li class="menu-item"><a href="principal.php?CONTENIDO=presentacion/hojaDeVida/usuariosHojaVida.php" class="item--a"><span>Diligenciar hoja de vida</span></a></li>
-                            <li class="menu-item"><a href="principal.php?CONTENIDO=presentacion/contrato/historialContrato.php" class="item--b"><span>Contrato Laboral</span></a></li>
-                            <li class="menu-item"><a href="principal.php?CONTENIDO=presentacion/historial/historialSarlaft.php" class="item--b"><span>Certificado de Sarlaft</span></a></li>
-                            <li class="menu-item"><a href="principal.php?CONTENIDO=presentacion/Novedades/novedades.php" class="item--c"><span>Novedades</span></a></li>
+                            <li class="menu-item item--a"><a href="principal.php?CONTENIDO=presentacion/hojaDeVida/usuariosHojaVida.php" class="item--a"><span>Diligenciar hoja de vida</span></a></li>
+                            <li class="menu-item item--b"><a href="principal.php?CONTENIDO=presentacion/contrato/historialContrato.php" class="item--b"><span>Contrato laboral</span></a></li>
+                            <li class="menu-item item--c"><a href="principal.php?CONTENIDO=presentacion/historial/historialSarlaft.php" class="item--c"><span>Certificado de Sarlaft</span></a></li>
+                            <li class="menu-item item--d"><a href="principal.php?CONTENIDO=presentacion/sst/usuariosDocumentos.php&grupo=formatos" class="item--d"><span>Formatos</span></a></li>
+                            <li class="menu-item item--e"><a href="principal.php?CONTENIDO=presentacion/Novedades/novedades.php" class="item--e"><span>Novedades</span></a></li>
                         </ol>
                     </li>
-
                     <li class="menu-item">
-                        <a href="" class="about">
-                            <i class="ion ion-md-"></i>
-                            <span></span>
-
+                        <a href="#0" class="about">
+                            <i class="ion ion-md-folder-open"></i>
+                            <span>SST</span>
+                            <div class="dots"></div>
                         </a>
-
+                        <ol class="sub-menu">
+                            <li class="menu-item item--a"><a href="principal.php?CONTENIDO=presentacion/sst/usuariosDocumentos.php&grupo=examenes" class="item--a"><span>Subir examenes</span></a></li>
+                            <li class="menu-item item--b"><a href="principal.php?CONTENIDO=presentacion/sst/usuariosDocumentos.php&grupo=vacunas" class="item--b"><span>Vacunas</span></a></li>
+                        </ol>
                     </li>
-
                     <li class="menu-item">
                         <a href="index.php" class="contact">
                             <i class="ion ion-md-exit"></i>
@@ -163,7 +164,6 @@ foreach ($_POST as $key => $value)
             </nav>
         <?php
             break;
-
         case 'Contrato de Servicio':
         ?>
             <nav class="menu">
@@ -177,33 +177,33 @@ foreach ($_POST as $key => $value)
                     <li class="menu-item">
                         <a href="#0" class="widgets">
                             <i class="ion ion-md-analytics"></i>
-                            <span>DESEMPEÑO</span>
+                            <span>DESEMPENO</span>
                             <div class="dots"></div>
                         </a>
-                        <ol class="sub-menu">
-
-                        </ol>
+                        <ol class="sub-menu"></ol>
                     </li>
                     <li class="menu-item">
                         <a href="#0" class="kabobs">
                             <i class="ion ion-md-document"></i>
-
-                            <span>HOJA DE VIDA </span>
+                            <span>VINCULACION E INCORPORACION</span>
+                            <div class="dots"></div>
                         </a>
                         <ol class="sub-menu">
-                            <li class="menu-item"><a href="principal.php?CONTENIDO=presentacion/hojaDeVida/usuariosHojaVida.php" class="item--a"><span>Diligenciar hoja de vida</span></a></li>
+                            <li class="menu-item item--a"><a href="principal.php?CONTENIDO=presentacion/hojaDeVida/usuariosHojaVida.php" class="item--a"><span>Diligenciar hoja de vida</span></a></li>
+                            <li class="menu-item item--b"><a href="principal.php?CONTENIDO=presentacion/sst/usuariosDocumentos.php&grupo=formatos" class="item--b"><span>Formatos</span></a></li>
                         </ol>
                     </li>
-
                     <li class="menu-item">
-                        <a href="" class="about">
-                            <i class="ion ion-md-"></i>
-                            <span></span>
-
+                        <a href="#0" class="about">
+                            <i class="ion ion-md-folder-open"></i>
+                            <span>SST</span>
+                            <div class="dots"></div>
                         </a>
-
+                        <ol class="sub-menu">
+                            <li class="menu-item item--a"><a href="principal.php?CONTENIDO=presentacion/sst/usuariosDocumentos.php&grupo=examenes" class="item--a"><span>Subir examenes</span></a></li>
+                            <li class="menu-item item--b"><a href="principal.php?CONTENIDO=presentacion/sst/usuariosDocumentos.php&grupo=vacunas" class="item--b"><span>Vacunas</span></a></li>
+                        </ol>
                     </li>
-
                     <li class="menu-item">
                         <a href="index.php" class="contact">
                             <i class="ion ion-md-exit"></i>
@@ -215,28 +215,19 @@ foreach ($_POST as $key => $value)
     <?php
             break;
     }
-
     ?>
     <div class="menu"></div>
     <div class='dashboard'>
         <div class='dashboard-app'>
-
             <div class='dashboard-content'>
-
                 <div class='card'>
-
                     <div class='card-body'>
-                        <!--<div id="opciones" >div>-->
-
                         <div id="contenido"><?= include $_REQUEST['CONTENIDO']; ?></div>
-
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
-
 </body>
 
 </html>
