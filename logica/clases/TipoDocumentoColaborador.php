@@ -15,8 +15,7 @@ class TipoDocumentoColaborador
         'formatos' => array(
             'Formato de induccion general',
             'Formato de induccion espesifica',
-            'Formato entrega de perfil de cargo',
-            'Formato entrega de carnet'
+            'Formato entrega de perfil de cargo y carnet'
         ),
         'vacunas' => array(
             'Vacuna tetano',
@@ -24,6 +23,11 @@ class TipoDocumentoColaborador
             'Vacuna hepatitis',
             'Titulacion de hepatitis'
         )
+    );
+
+    public const TIPOS_MIGRADOS = array(
+        'Formato entrega de perfil de cargo' => 'Formato entrega de perfil de cargo y carnet',
+        'Formato entrega de carnet' => 'Formato entrega de perfil de cargo y carnet'
     );
 
     public function __construct($campo, $valor)
@@ -105,6 +109,8 @@ class TipoDocumentoColaborador
                 }
             }
         }
+
+        self::migrarTiposAnteriores();
     }
 
     public static function getTiposPorGrupo($grupo)
@@ -150,6 +156,23 @@ class TipoDocumentoColaborador
                 return 'VACUNAS';
             default:
                 return 'EXAMENES';
+        }
+    }
+
+    public static function migrarTiposAnteriores()
+    {
+        foreach (self::TIPOS_MIGRADOS as $tipoAnterior => $tipoNuevo) {
+            $tipoDestino = self::getLista("nombre='" . str_replace("'", "\\'", $tipoNuevo) . "'", null);
+            $tipoOrigen = self::getLista("nombre='" . str_replace("'", "\\'", $tipoAnterior) . "'", null);
+
+            if (count($tipoDestino) > 0 && count($tipoOrigen) > 0) {
+                $idDestino = $tipoDestino[0]['id'];
+                $idOrigen = $tipoOrigen[0]['id'];
+
+                if ($idDestino != $idOrigen) {
+                    ConectorBD::ejecutaryQuery("update documento_colaborador set id_tipo_documento='$idDestino' where id_tipo_documento='$idOrigen'");
+                }
+            }
         }
     }
 }

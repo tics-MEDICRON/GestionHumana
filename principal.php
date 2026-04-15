@@ -43,40 +43,56 @@ foreach ($_POST as $key => $value) {
     <meta charset="UTF-8">
     <title>Gestion Humana - <?= $USUARIO ?> (<?= $USUARIO->getTipoEnObjeto() ?>)</title>
     <link rel="stylesheet" href="presentacion/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="presentacion/css/menu.css" />
+    <link rel="stylesheet" href="presentacion/css/principal.css" />
     <link rel="stylesheet" href="https://anandchowdhary.github.io/ionicons-3-cdn/icons.css" integrity="sha384-+iqgM+tGle5wS+uPwXzIjZS5v6VkqCUV7YQ/e/clzRHAxYbzpUJ+nldylmtBWCP0" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
-    <script src="presentacion/js/menu.js"></script>
+    <script src="presentacion/js/principal.js" defer></script>
 </head>
 
-<body>
+<body class="principal-layout">
+    <header class="app-header">
+        <div class="brand-block">
+            <img src="presentacion/img/medicronLogo.png" alt="Medicron" class="brand-logo-image">
+        </div>
+        <div class="header-search" aria-hidden="true">
+            <i class="ion ion-md-search"></i>
+            <span>Navegación y módulos</span>
+        </div>
+        <div class="user-summary">
+            <span class="user-summary__label">Sesi&oacute;n activa</span>
+            <strong><?= $USUARIO ?></strong>
+            <small><?= $USUARIO->getTipoEnObjeto() ?></small>
+        </div>
+    </header>
+
+    <div class="app-shell">
     <?php
     switch ($USUARIO->getTipo()) {
         case 'Administrador':
     ?>
-            <nav class="menu">
+            <nav class="menu" aria-label="Navegaci�n principal">
                 <ol>
                     <li class="menu-item">
                         <a href="principal.php?CONTENIDO=presentacion/inicio.php" class="home">
                             <i class="ion ion-md-home"></i>
-                            <span>INICIO</span>
+                            <span>Inicio</span>
                         </a>
                     </li>
                     <li class="menu-item">
                         <a href="#0" class="widgets">
                             <i class="ion ion-md-analytics"></i>
-                            <span>GESTION DE DESEMPENO</span>
+                            <span>Gesti&oacute;n de desempe&ntilde;o</span>
                             <div class="dots"></div>
                         </a>
                         <ol class="sub-menu">
-                            <li class="menu-item item--a"><a href="principal.php?CONTENIDO=presentacion/usuarios/usuarios.php" class="item--a"><span>Ejecucion evaluacion de desempeno</span></a></li>
-                            <li class="menu-item item--b"><a href="principal.php?CONTENIDO=presentacion/evaluacion/historialEvaluacion.php" class="item--b"><span>Historial de evaluaciones de desempeno</span></a></li>
+                            <li class="menu-item item--a"><a href="principal.php?CONTENIDO=presentacion/usuarios/usuarios.php" class="item--a"><span>Ejecuci&oacute;n de evaluaci&oacute;n de desempe&ntilde;o</span></a></li>
+                            <li class="menu-item item--b"><a href="principal.php?CONTENIDO=presentacion/evaluacion/historialEvaluacion.php" class="item--b"><span>Historial de evaluaciones de desempe&ntilde;o</span></a></li>
                         </ol>
                     </li>
                     <li class="menu-item">
                         <a href="#0" class="kabobs">
                             <i class="ion ion-md-document"></i>
-                            <span>VINCULACION E INCORPORACION</span>
+                            <span>Vinculaci&oacute;n e incorporaci&oacute;n</span>
                             <div class="dots"></div>
                         </a>
                         <ol class="sub-menu">
@@ -94,14 +110,14 @@ foreach ($_POST as $key => $value) {
                             <div class="dots"></div>
                         </a>
                         <ol class="sub-menu">
-                            <li class="menu-item item--a"><a href="principal.php?CONTENIDO=presentacion/sst/usuariosDocumentos.php&grupo=examenes" class="item--a"><span>Examenes ocupacionales</span></a></li>
+                            <li class="menu-item item--a"><a href="principal.php?CONTENIDO=presentacion/sst/usuariosDocumentos.php&grupo=examenes" class="item--a"><span>Ex&aacute;menes ocupacionales</span></a></li>
                             <li class="menu-item item--b"><a href="principal.php?CONTENIDO=presentacion/sst/usuariosDocumentos.php&grupo=vacunas" class="item--b"><span>Vacunas</span></a></li>
                         </ol>
                     </li>
                     <li class="menu-item">
                         <a href="index.php" class="contact">
                             <i class="ion ion-md-exit"></i>
-                            <span>SALIR</span>
+                            <span>Salir</span>
                         </a>
                     </li>
                 </ol>
@@ -115,24 +131,24 @@ foreach ($_POST as $key => $value) {
                     <li class="menu-item">
                         <a href="principal.php?CONTENIDO=presentacion/inicio.php" class="home">
                             <i class="ion ion-md-home"></i>
-                            <span>INICIO</span>
+                            <span>Inicio</span>
                         </a>
                     </li>
                     <li class="menu-item">
                         <a href="#0" class="widgets">
                             <i class="ion ion-md-analytics"></i>
-                            <span>DESEMPENO</span>
+                            <span>Desempe&ntilde;o</span>
                             <div class="dots"></div>
                         </a>
                         <ol class="sub-menu">
-                            <li class="menu-item item--a"><a href="principal.php?CONTENIDO=presentacion/usuarios/usuarios.php" class="item--a"><span>Ejecucion evaluacion de desempeno</span></a></li>
-                            <li class="menu-item item--b"><a href="principal.php?CONTENIDO=presentacion/evaluacion/historialEvaluacion.php" class="item--b"><span>Historial de evaluaciones de desempeno</span></a></li>
+                            <li class="menu-item item--a"><a href="principal.php?CONTENIDO=presentacion/usuarios/usuarios.php" class="item--a"><span>Ejecuci&oacute;n de evaluaci&oacute;n de desempe&ntilde;o</span></a></li>
+                            <li class="menu-item item--b"><a href="principal.php?CONTENIDO=presentacion/evaluacion/historialEvaluacion.php" class="item--b"><span>Historial de evaluaciones de desempe&ntilde;o</span></a></li>
                         </ol>
                     </li>
                     <li class="menu-item">
                         <a href="#0" class="kabobs">
                             <i class="ion ion-md-document"></i>
-                            <span>VINCULACION E INCORPORACION</span>
+                            <span>Vinculaci&oacute;n e incorporaci&oacute;n</span>
                             <div class="dots"></div>
                         </a>
                         <ol class="sub-menu">
@@ -150,14 +166,14 @@ foreach ($_POST as $key => $value) {
                             <div class="dots"></div>
                         </a>
                         <ol class="sub-menu">
-                            <li class="menu-item item--a"><a href="principal.php?CONTENIDO=presentacion/sst/usuariosDocumentos.php&grupo=examenes" class="item--a"><span>Subir examenes</span></a></li>
+                            <li class="menu-item item--a"><a href="principal.php?CONTENIDO=presentacion/sst/usuariosDocumentos.php&grupo=examenes" class="item--a"><span>Subir ex&aacute;menes</span></a></li>
                             <li class="menu-item item--b"><a href="principal.php?CONTENIDO=presentacion/sst/usuariosDocumentos.php&grupo=vacunas" class="item--b"><span>Vacunas</span></a></li>
                         </ol>
                     </li>
                     <li class="menu-item">
                         <a href="index.php" class="contact">
                             <i class="ion ion-md-exit"></i>
-                            <span>SALIR</span>
+                            <span>Salir</span>
                         </a>
                     </li>
                 </ol>
@@ -171,13 +187,13 @@ foreach ($_POST as $key => $value) {
                     <li class="menu-item">
                         <a href="principal.php?CONTENIDO=presentacion/inicio.php" class="home">
                             <i class="ion ion-md-home"></i>
-                            <span>INICIO</span>
+                            <span>Inicio</span>
                         </a>
                     </li>
                     <li class="menu-item">
                         <a href="#0" class="widgets">
                             <i class="ion ion-md-analytics"></i>
-                            <span>DESEMPENO</span>
+                            <span>Desempe&ntilde;o</span>
                             <div class="dots"></div>
                         </a>
                         <ol class="sub-menu"></ol>
@@ -185,7 +201,7 @@ foreach ($_POST as $key => $value) {
                     <li class="menu-item">
                         <a href="#0" class="kabobs">
                             <i class="ion ion-md-document"></i>
-                            <span>VINCULACION E INCORPORACION</span>
+                            <span>Vinculaci&oacute;n e incorporaci&oacute;n</span>
                             <div class="dots"></div>
                         </a>
                         <ol class="sub-menu">
@@ -200,14 +216,14 @@ foreach ($_POST as $key => $value) {
                             <div class="dots"></div>
                         </a>
                         <ol class="sub-menu">
-                            <li class="menu-item item--a"><a href="principal.php?CONTENIDO=presentacion/sst/usuariosDocumentos.php&grupo=examenes" class="item--a"><span>Subir examenes</span></a></li>
+                            <li class="menu-item item--a"><a href="principal.php?CONTENIDO=presentacion/sst/usuariosDocumentos.php&grupo=examenes" class="item--a"><span>Subir ex&aacute;menes</span></a></li>
                             <li class="menu-item item--b"><a href="principal.php?CONTENIDO=presentacion/sst/usuariosDocumentos.php&grupo=vacunas" class="item--b"><span>Vacunas</span></a></li>
                         </ol>
                     </li>
                     <li class="menu-item">
                         <a href="index.php" class="contact">
                             <i class="ion ion-md-exit"></i>
-                            <span>SALIR</span>
+                            <span>Salir</span>
                         </a>
                     </li>
                 </ol>
@@ -216,13 +232,20 @@ foreach ($_POST as $key => $value) {
             break;
     }
     ?>
-    <div class="menu"></div>
-    <div class='dashboard'>
-        <div class='dashboard-app'>
-            <div class='dashboard-content'>
-                <div class='card'>
-                    <div class='card-body'>
-                        <div id="contenido"><?= include $_REQUEST['CONTENIDO']; ?></div>
+
+        <div class='dashboard'>
+            <div class='dashboard-app'>
+                <div class="dashboard-heading">
+                    <div>
+                        <span class="dashboard-heading__eyebrow">Espacio de trabajo</span>
+                        <h2>Contenido principal</h2>
+                    </div>
+                </div>
+                <div class='dashboard-content'>
+                    <div class='card'>
+                        <div class='card-body'>
+                            <div id="contenido"><?= include $_REQUEST['CONTENIDO']; ?></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -231,3 +254,5 @@ foreach ($_POST as $key => $value) {
 </body>
 
 </html>
+
+

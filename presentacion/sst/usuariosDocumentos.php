@@ -7,6 +7,7 @@ $grupo = isset($_REQUEST['grupo']) ? $_REQUEST['grupo'] : 'examenes';
 TipoDocumentoColaborador::sincronizarTipos();
 $tituloGrupo = TipoDocumentoColaborador::getTituloGrupo($grupo);
 $filtro = '';
+$buscar = isset($_REQUEST['buscar']) ? trim($_REQUEST['buscar']) : '';
 
 if (isset($buscador)) {
     if (is_numeric($buscar)) {
@@ -49,13 +50,17 @@ for ($i = 0; $i < count($resultado); $i++) {
 <?php
 if ($USUARIO->getTipoEnObjeto() == "Administrador") {
     echo "<form method='post' action='principal.php?CONTENIDO=presentacion/sst/usuariosDocumentos.php&grupo={$grupo}' class='d-flex'>
-    <input class='form-control me-sm-3' type='text' name='buscar' id='buscar' placeholder='Buscador' title='Ingrese el valor que desea buscar y presione el boton buscar'>
+    <input class='form-control me-sm-3' type='text' name='buscar' id='buscar' value='{$buscar}' placeholder='Buscador' title='Ingrese el valor que desea buscar y presione el boton buscar'>
     <button class='btn btn-secondary my-2 my-sm-0' name='buscador' id='buscador' type='submit' value='Buscar'>Buscar</button>
   </form>";
 }
 ?>
 
 <br>
+
+<div class="mb-3">
+    <a href="presentacion/sst/exportarDocumentosExcel.php?grupo=<?= urlencode($grupo) ?>&buscar=<?= urlencode($buscar) ?>" class="btn btn-success">Exportar Excel</a>
+</div>
 
 <table class="table table-hover">
     <tr class="table-success">
