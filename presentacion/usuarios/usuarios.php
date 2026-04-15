@@ -13,80 +13,82 @@ if (isset($buscador)) {
 }
 $lista = '';
 if ($USUARIO->getTipoEnObjeto() == "Colaborador") {
-$resultado = Persona::getListaEnObjetos("concat(nombres,' ',apellidos) = '$USUARIO'", null);
-for ($i = 0; $i < count($resultado); $i++) {
+  $resultado = Persona::getListaEnObjetos("concat(nombres,' ',apellidos) = '$USUARIO'", null);
+  for ($i = 0; $i < count($resultado); $i++) {
     $persona = $resultado[$i];
-      $lista .= '<tr>';
-      $lista .= "<td>{$persona->getIdentificacion()}</td>";
-      $lista .= "<td>{$persona->getNombres()}</td>";
-      $lista .= "<td>{$persona->getApellidos()}</td>";
-      $lista .= "<td>{$persona->getTipo()}</td>";
-      $lista .= "<td>{$persona->getCargo()}</td>";
-      $lista .= '<td>';
-      $lista .= '</td>';
-      $lista .= '</tr>';
+    $lista .= '<tr>';
+    $lista .= "<td>{$persona->getIdentificacion()}</td>";
+    $lista .= "<td>{$persona->getNombres()}</td>";
+    $lista .= "<td>{$persona->getApellidos()}</td>";
+    $lista .= "<td>{$persona->getTipo()}</td>";
+    $lista .= "<td>{$persona->getCargo()}</td>";
+    $lista .= '<td></td>';
+    $lista .= '</tr>';
   }
 } else {
   $resultado = Persona::getListaEnObjetos($filtro, null);
-for ($i = 0; $i < count($resultado); $i++) {
+  for ($i = 0; $i < count($resultado); $i++) {
     $persona = $resultado[$i];
-      $lista .= '<tr>';
-      $lista .= "<td>{$persona->getIdentificacion()}</td>";
-      $lista .= "<td>{$persona->getNombres()}</td>";
-      $lista .= "<td>{$persona->getApellidos()}</td>";
-      $lista .= "<td>{$persona->getTipo()}</td>";
-      $lista .= "<td>{$persona->getCargo()}</td>";
-      $lista .= '<td>';
-      $lista .= "<a href='principal.php?CONTENIDO=presentacion/usuarios/usuariosFormulario.php&accion=Modificar&identificacion={$persona->getIdentificacion()}' title='Cambiar rol de usuario'><img src='presentacion/img/roles.png'></a> ";
-      $lista .= "<a href='principal.php?CONTENIDO=presentacion/evaluacion/evaluacionDesempeno.php&idDesempeno={$persona->getIdentificacion()}' title='Evaluacion de Desempeño'><img src='presentacion/img/evaluaciones.png'></a> ";
-      $lista .= "<a href='principal.php?CONTENIDO=presentacion/pdf/pdf.php&idDesempeno={$persona->getIdentificacion()}' title='Descargar Evaluacion de Desempeño' ><img src='presentacion/img/descargar.png'></a> ";
-      //$lista .= "<a href='principal.php?CONTENIDO=presentacion/usuarios/permisoFormulario.php&identificacion={$persona->getIdentificacion()}' title='Permiso temporal'><img src='presentacion/img/permisoTemporal.png'></a> ";
-      $lista .= "<img src='presentacion/img/eliminar.png' onClick='eliminar({$persona->getIdentificacion()})' title='Eliminar'>";
-      $lista .= '</td>';
-      $lista .= '</tr>';
+    $lista .= '<tr>';
+    $lista .= "<td>{$persona->getIdentificacion()}</td>";
+    $lista .= "<td>{$persona->getNombres()}</td>";
+    $lista .= "<td>{$persona->getApellidos()}</td>";
+    $lista .= "<td>{$persona->getTipo()}</td>";
+    $lista .= "<td>{$persona->getCargo()}</td>";
+    $lista .= '<td class="table-actions">';
+    $lista .= "<a href='principal.php?CONTENIDO=presentacion/usuarios/usuariosFormulario.php&accion=Modificar&identificacion={$persona->getIdentificacion()}' title='Cambiar rol de usuario'><img src='presentacion/img/roles.png' alt='Cambiar rol'></a> ";
+    $lista .= "<a href='principal.php?CONTENIDO=presentacion/evaluacion/evaluacionDesempeno.php&idDesempeno={$persona->getIdentificacion()}' title='Evaluaci&oacute;n de desempe&ntilde;o'><img src='presentacion/img/evaluaciones.png' alt='Evaluaci&oacute;n'></a> ";
+    $lista .= "<a href='principal.php?CONTENIDO=presentacion/pdf/pdf.php&idDesempeno={$persona->getIdentificacion()}' title='Descargar evaluaci&oacute;n de desempe&ntilde;o'><img src='presentacion/img/descargar.png' alt='Descargar evaluaci&oacute;n'></a> ";
+    $lista .= "<img src='presentacion/img/eliminar.png' onClick='eliminar({$persona->getIdentificacion()})' title='Eliminar' alt='Eliminar'>";
+    $lista .= '</td>';
+    $lista .= '</tr>';
   }
 }
-
-
 ?>
 
-<center>
-  <h1>LISTA DE USUARIOS </h1>
-</center>
+<div class="page-shell">
+  <div class="page-header">
+    <div>
+      <span class="page-kicker">Usuarios</span>
+      <h1 class="page-title">Lista de usuarios</h1>
+      <p class="page-subtitle">Consulta la informaci&oacute;n principal y administra las acciones disponibles para cada perfil.</p>
+    </div>
+  </div>
 
-</br>
-</br>
+  <?php if ($USUARIO->getTipoEnObjeto() != "Colaborador") { ?>
+    <form method="post" action="principal.php?CONTENIDO=presentacion/usuarios/usuarios.php" class="toolbar-search">
+      <div class="toolbar-search__field">
+        <i class="ion ion-md-search"></i>
+        <input class="form-control" type="text" name="buscar" id="buscar" placeholder="Buscar por identificaci&oacute;n, nombre o apellido" title="Ingresa el valor que deseas buscar y presiona el bot&oacute;n buscar">
+      </div>
+      <button class="toolbar-search__button" name="buscador" id="buscador" type="submit" value="Buscar">Buscar</button>
+    </form>
+  <?php } ?>
 
-<?php
-if ($USUARIO->getTipoEnObjeto() == "Colaborador") {
-} else {
-  echo "<form method='post' action='principal.php?CONTENIDO=presentacion/usuarios/usuarios.php' class='d-flex'>
-  <input class='form-control me-sm-3' type='text' name='buscar' id='buscar' placeholder='Buscador' title='Ingrese el valor que desea buscar y presione el boton buscar'>
-  <button class='btn btn-secondary my-2 my-sm-0' name='buscador' id='buscador' type='submit' value='Buscar'>Buscar</button>
-</form>";
-}
-?>
-
-<br>
-
-
-
-<table class="table table-hover">
-  <tr class="table-success">
-    <th scope="row">IDENTIFICACION</th>
-    <td>NOMBRES</td>
-    <td>APELLIDOS</td>
-    <td>TIPO</td>
-    <td>CARGO</td>
-    <td></td>
-  </tr>
-  <?= $lista ?>
-
-</table>
+  <div class="data-table-card">
+    <div class="table-responsive">
+      <table class="table table-hover app-table">
+        <thead>
+          <tr>
+            <th scope="col">Identificaci&oacute;n</th>
+            <th scope="col">Nombres</th>
+            <th scope="col">Apellidos</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Cargo</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?= $lista ?>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
 <script type="text/javascript">
   function eliminar(id) {
-    var respuesta = confirm("Esta seguro de eliminar este registro");
-    if (respuesta) location = "principal.php?CONTENIDO=presentacion/usuarios/usuariosActualizar.php&accion=Eliminar&identificacion="+id;
+    var respuesta = confirm("Esta seguro de eliminar este registro?");
+    if (respuesta) location = "principal.php?CONTENIDO=presentacion/usuarios/usuariosActualizar.php&accion=Eliminar&identificacion=" + id;
   }
 </script>
