@@ -107,7 +107,7 @@ header('Expires: 0');
             $registro = $registros[$i];
             $vigente = isset($registro['vigente']) && $registro['vigente'] == 1 ? 'Si' : 'No';
             $tipoDocumentoIdentidad = isset($registro['tipoDocumento']) ? $registro['tipoDocumento'] : '';
-            $tipoDocumentoCargado = isset($registro['tipo_documento_cargado']) ? $registro['tipo_documento_cargado'] : '';
+            $tipoDocumentoCargado = isset($registro['tipo_documento_cargado']) ? TipoDocumentoColaborador::getNombreVisible($registro['tipo_documento_cargado']) : '';
             $cargo = isset($registro['cargo']) ? $registro['cargo'] : '';
             $fechaDocumento = isset($registro['fecha_documento']) && $registro['fecha_documento'] != null
                 ? date('d/m/Y', strtotime($registro['fecha_documento']))
@@ -121,7 +121,7 @@ header('Expires: 0');
                 <td class="texto"><?= htmlspecialchars($registro['apellidos']) ?></td>
                 <td><?= htmlspecialchars($registro['tipo']) ?></td>
                 <td class="texto"><?= htmlspecialchars($cargo) ?></td>
-                <td><?= htmlspecialchars($tipoDocumentoCargado) ?></td>
+                <td><?= $tipoDocumentoCargado ?></td>
                 <td style="mso-number-format:'dd/mm/yyyy';"><?= htmlspecialchars($fechaDocumento) ?></td>
                 <td><?= htmlspecialchars($vigente) ?></td>
                 <td class="texto"><?= htmlspecialchars($archivo) ?></td>

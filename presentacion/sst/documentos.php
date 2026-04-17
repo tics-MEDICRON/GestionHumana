@@ -23,10 +23,11 @@ for ($i = 0; $i < count($documentos); $i++) {
     $documento = $documentos[$i];
     $estado = $documento->getVigente() == 1 ? 'Si' : 'No';
     $fechaDocumento = $documento->getFechaDocumento() == null ? '' : $documento->getFechaDocumento();
+    $tipoDocumentoVisible = TipoDocumentoColaborador::getNombreVisible($documento->getTipoDocumento());
 
     $lista .= '<tr>';
     $lista .= "<td>{$documento->getId()}</td>";
-    $lista .= "<td>{$documento->getTipoDocumento()}</td>";
+    $lista .= "<td>{$tipoDocumentoVisible}</td>";
     $lista .= "<td>{$fechaDocumento}</td>";
     $lista .= "<td>{$estado}</td>";
     $lista .= "<td><a href='presentacion/sst/documentos/{$documento->getRutaArchivo()}' target='_blank' title='{$documento->getNombreOriginal()}'><img src='presentacion/img/descargar.png'></a></td>";

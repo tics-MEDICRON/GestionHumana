@@ -83,7 +83,8 @@ $tipos = TipoDocumentoColaborador::getListaPorGrupo($grupo);
             <?php
             for ($i = 0; $i < count($tipos); $i++) {
                 $selected = $documento->getIdTipoDocumento() == $tipos[$i]['id'] ? 'selected' : '';
-                echo "<option value='{$tipos[$i]['id']}' $selected>{$tipos[$i]['nombre']}</option>";
+                $nombreVisible = TipoDocumentoColaborador::getNombreVisible($tipos[$i]['nombre']);
+                echo "<option value='{$tipos[$i]['id']}' $selected>{$nombreVisible}</option>";
             }
             ?>
         </select>

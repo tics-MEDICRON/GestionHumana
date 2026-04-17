@@ -6,7 +6,7 @@
     <span class="welcome-kicker">Kit de herramientas</span>
     <h1>Bienvenido al sistema de gesti&oacute;n humana</h1>
     <p>Accede a las herramientas necesarias para gestionar el talento humano de Medicron. Selecciona una opci&oacute;n del men&uacute; lateral para comenzar.</p>
-    <span class="welcome-badge">V 1.2.0</span>
+    <span class="welcome-badge">V 1.2.1</span>
   </div>
 
   <div class="welcome-summary">
