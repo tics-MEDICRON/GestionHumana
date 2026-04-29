@@ -19,6 +19,7 @@ if (isset($_REQUEST['id'])) {
 } else {
   $directorio = new Desempeno(null, null);
   $directorio->setIdDesempeno($_REQUEST['idDesempeno']);
+  if (isset($_REQUEST['idEvaluacionDesempeno'])) $directorio->setIdEvaluacionDesempeno($_REQUEST['idEvaluacionDesempeno']);
 }
 $evento = $directorio->getPersona();
 
@@ -98,8 +99,9 @@ $evento = $directorio->getPersona();
 
       <input type="hidden" name="id" value="<?= $directorio->getId() ?>" />
       <input type="hidden" name="idDesempeno" value="<?= $directorio->getIdDesempeno() ?>">
+      <input type="hidden" name="idEvaluacionDesempeno" value="<?= $directorio->getIdEvaluacionDesempeno() ?>">
       <button type="submit" name="accion" class="btn btn-success" value="<?= $titulo ?>"><?= $titulo ?></button>
-      <button type="submit" name="accion" class="btn btn-danger" value="Cancelar">Cancelar</button>
+      <a class="btn btn-danger" href="principal.php?CONTENIDO=presentacion/evaluacion/evaluacionDesempeno.php&idDesempeno=<?= $directorio->getIdDesempeno() ?>&idEvaluacionDesempeno=<?= $directorio->getIdEvaluacionDesempeno() ?>">Cancelar</a>
 </form>
 
 <script>

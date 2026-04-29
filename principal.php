@@ -12,7 +12,9 @@ require_once 'logica/clases/Laboral.php';
 require_once 'logica/clases/ReferenciaLaboral.php';
 require_once 'logica/clases/ReferenciaPersonal.php';
 require_once 'logica/clases/Desempeno.php';
+require_once 'logica/clases/Competencia.php';
 require_once 'logica/clases/EvaluacionCompetencia.php';
+require_once 'logica/clases/EvaluacionDesempeno.php';
 require_once 'logica/clases/HistorialEvaluacion.php';
 require_once 'logica/clases/HistorialSarlaft.php';
 require_once 'logica/clases/Novedades.php';
@@ -87,6 +89,7 @@ foreach ($_POST as $key => $value) {
                         <ol class="sub-menu">
                             <li class="menu-item item--a"><a href="principal.php?CONTENIDO=presentacion/usuarios/usuarios.php" class="item--a"><span>Ejecuci&oacute;n de evaluaci&oacute;n de desempe&ntilde;o</span></a></li>
                             <li class="menu-item item--b"><a href="principal.php?CONTENIDO=presentacion/evaluacion/historialEvaluacion.php" class="item--b"><span>Historial de evaluaciones de desempe&ntilde;o</span></a></li>
+                            <li class="menu-item item--c"><a href="principal.php?CONTENIDO=presentacion/evaluacion/competencias.php" class="item--c"><span>Competencias</span></a></li>
                         </ol>
                     </li>
                     <li class="menu-item">

@@ -18,6 +18,7 @@ if (isset($_REQUEST['id'])) {
 } else {
   $directorio = new EvaluacionCompetencia(null, null);
   $directorio->setIdPersona($_REQUEST['idPersona']);
+  if (isset($_REQUEST['idEvaluacionDesempeno'])) $directorio->setIdEvaluacionDesempeno($_REQUEST['idEvaluacionDesempeno']);
 }
 $evento = $directorio->getPersona();
 
@@ -32,7 +33,6 @@ $evento = $directorio->getPersona();
     <?php
     $cadenasql = "select id, descripcion from competencia";
     $campo = ConectorBD::ejecutaryQuery($cadenasql);
-    var_dump($campo);
     foreach ($campo as $opciones) {
         $idCompetencia = $opciones['id'];
         $descripcion = $opciones['descripcion'];
@@ -142,7 +142,9 @@ $evento = $directorio->getPersona();
 
       <input type="hidden" name="id" value="<?= $directorio->getId() ?>" />
       <input type="hidden" name="idDesempeno" value="<?= $directorio->getIdPersona() ?>">
+      <input type="hidden" name="idEvaluacionDesempeno" value="<?= $directorio->getIdEvaluacionDesempeno() ?>">
       <button type="submit" name="accion" class="btn btn-success" value="<?= $titulo ?>"><?= $titulo ?></button>
+      <a class="btn btn-danger" href="principal.php?CONTENIDO=presentacion/evaluacion/evaluacionDesempeno.php&idDesempeno=<?= $directorio->getIdPersona() ?>&idEvaluacionDesempeno=<?= $directorio->getIdEvaluacionDesempeno() ?>">Cancelar</a>
 </form>
 
 

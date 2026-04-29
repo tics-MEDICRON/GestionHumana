@@ -3,6 +3,8 @@
 if (!isset($_SESSION['usuario'])) header('location: ../../index.php?mensaje=Acceso no autorizado');
 $USUARIO = unserialize($_SESSION['usuario']);
 $desempeno = new Desempeno(null, null);
+$filtro = '';
+$buscar = isset($buscar) ? $buscar : '';
 
 if (isset($buscador)) {
   if (is_numeric($buscar)) {
@@ -37,7 +39,7 @@ if ($USUARIO->getTipoEnObjeto() == "Colaborador") {
     $lista .= "<td>{$persona->getCargo()}</td>";
     $lista .= '<td class="table-actions">';
     $lista .= "<a href='principal.php?CONTENIDO=presentacion/usuarios/usuariosFormulario.php&accion=Modificar&identificacion={$persona->getIdentificacion()}' title='Cambiar rol de usuario'><img src='presentacion/img/roles.png' alt='Cambiar rol'></a> ";
-    $lista .= "<a href='principal.php?CONTENIDO=presentacion/evaluacion/evaluacionDesempeno.php&idDesempeno={$persona->getIdentificacion()}' title='Evaluaci&oacute;n de desempe&ntilde;o'><img src='presentacion/img/evaluaciones.png' alt='Evaluaci&oacute;n'></a> ";
+    $lista .= "<a href='principal.php?CONTENIDO=presentacion/evaluacion/evaluacionesPeriodo.php&idDesempeno={$persona->getIdentificacion()}' title='Evaluaciones por periodo'><img src='presentacion/img/evaluaciones.png' alt='Evaluaci&oacute;n'></a> ";
     $lista .= "<a href='principal.php?CONTENIDO=presentacion/pdf/pdf.php&idDesempeno={$persona->getIdentificacion()}' title='Descargar evaluaci&oacute;n de desempe&ntilde;o'><img src='presentacion/img/descargar.png' alt='Descargar evaluaci&oacute;n'></a> ";
     $lista .= "<img src='presentacion/img/eliminar.png' onClick='eliminar({$persona->getIdentificacion()})' title='Eliminar' alt='Eliminar'>";
     $lista .= '</td>';

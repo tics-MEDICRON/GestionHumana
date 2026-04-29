@@ -11,13 +11,14 @@ class Desempeno
     private $calificacion;
     private $rango;
     private $idDesempeno;
+    private $idEvaluacionDesempeno;
 
 
     public function __construct($campo, $valor)
     {
         if ($campo != null) {
             if (!is_array($campo)) {
-                $cadenaSQL = "select id, logro, tipo, peso, evaluador, evidencia, calificacion, rango, idDesempeno from desempeno where $campo= $valor";
+                $cadenaSQL = "select id, logro, tipo, peso, evaluador, evidencia, calificacion, rango, idDesempeno, idEvaluacionDesempeno from desempeno where $campo= $valor";
                 $campo = ConectorBD::ejecutaryQuery($cadenaSQL)[0];
             }
             $this->id = $campo['id'];
@@ -29,6 +30,7 @@ class Desempeno
             $this->calificacion = $campo['calificacion'];
             $this->rango = $campo['rango'];
             $this->idDesempeno = $campo['idDesempeno'];
+            $this->idEvaluacionDesempeno = isset($campo['idEvaluacionDesempeno']) ? $campo['idEvaluacionDesempeno'] : null;
         }
     }
 
@@ -68,6 +70,10 @@ class Desempeno
     {
         return $this->idDesempeno;
     }
+    public function getIdEvaluacionDesempeno()
+    {
+        return $this->idEvaluacionDesempeno;
+    }
 
     public function setId($id): void
     {
@@ -106,6 +112,10 @@ class Desempeno
     {
         $this->idDesempeno = $idDesempeno;
     }
+    public function setIdEvaluacionDesempeno($idEvaluacionDesempeno): void
+    {
+        $this->idEvaluacionDesempeno = $idEvaluacionDesempeno;
+    }
 
     public function getPersona()
     {
@@ -114,13 +124,15 @@ class Desempeno
 
     public function guardar()
     {
-        $cadenaSQL = "insert into desempeno(logro, tipo, peso, evaluador, evidencia, calificacion, rango, idDesempeno) values ('$this->logro','$this->tipo','$this->peso','$this->evaluador','$this->evidencia', $this->calificacion, '$this->rango' , '$this->idDesempeno')";
+        $idEvaluacion = $this->idEvaluacionDesempeno == null || $this->idEvaluacionDesempeno == '' ? 'NULL' : "'$this->idEvaluacionDesempeno'";
+        $cadenaSQL = "insert into desempeno(logro, tipo, peso, evaluador, evidencia, calificacion, rango, idDesempeno, idEvaluacionDesempeno) values ('$this->logro','$this->tipo','$this->peso','$this->evaluador','$this->evidencia', $this->calificacion, '$this->rango' , '$this->idDesempeno', $idEvaluacion)";
         //echo $cadenaSQL;
         ConectorBD::ejecutaryQuery($cadenaSQL);
     }
     public function modificar()
     {
-        $cadenaSQL = "update desempeno set logro='$this->logro',tipo='$this->tipo',peso='$this->peso',evaluador='$this->evaluador',evidencia='$this->evidencia',calificacion='$this->calificacion',rango='$this->rango', idDesempeno ='$this->idDesempeno' where id='$this->id'";
+        $idEvaluacion = $this->idEvaluacionDesempeno == null || $this->idEvaluacionDesempeno == '' ? 'NULL' : "'$this->idEvaluacionDesempeno'";
+        $cadenaSQL = "update desempeno set logro='$this->logro',tipo='$this->tipo',peso='$this->peso',evaluador='$this->evaluador',evidencia='$this->evidencia',calificacion='$this->calificacion',rango='$this->rango', idDesempeno ='$this->idDesempeno', idEvaluacionDesempeno=$idEvaluacion where id='$this->id'";
         //echo $cadenaSQL;
         ConectorBD::ejecutaryQuery($cadenaSQL);
     }
@@ -145,7 +157,7 @@ class Desempeno
         else $filtro = "where $filtro";
         if ($orden == null || $orden == '') $orden = '';
         else $orden = "order by $orden";
-        $cadenaSQL = "select desempeno.id, logro, desempeno.tipo, peso, evaluador, evidencia, calificacion, rango, idDesempeno from desempeno INNER JOIN persona on persona.identificacion = idDesempeno $filtro $orden";
+        $cadenaSQL = "select desempeno.id, logro, desempeno.tipo, peso, evaluador, evidencia, calificacion, rango, idDesempeno, idEvaluacionDesempeno from desempeno INNER JOIN persona on persona.identificacion = idDesempeno $filtro $orden";
         return ConectorBD::ejecutaryQuery($cadenaSQL);
     }
     public static function getLIstaEnObjetos($filtro, $orden)
