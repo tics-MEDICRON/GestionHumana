@@ -2,6 +2,9 @@
 @session_start();
 if (!isset($_SESSION['usuario'])) header('location: ../../index.php?mensaje=Acceso no autorizado');
 $persona = new Persona('identificacion', $_REQUEST['idDesempeno']);
+$idEvaluacionDesempeno = isset($_REQUEST['idEvaluacionDesempeno']) ? $_REQUEST['idEvaluacionDesempeno'] : '';
+$filtroPeriodoDesempeno = $idEvaluacionDesempeno != '' ? "idEvaluacionDesempeno=$idEvaluacionDesempeno" : "idEvaluacionDesempeno is null";
+$filtroPeriodoCompetencia = $idEvaluacionDesempeno != '' ? "idEvaluacionDesempeno=$idEvaluacionDesempeno" : "idEvaluacionDesempeno is null";
 
 
 $lista = '';
@@ -18,7 +21,7 @@ $resultDesempeno = "";
 $resultFinal = "";
 
 
-$resultado = Desempeno::getListaEnObjetos("idDesempeno={$persona->getIdentificacion()}", null);
+$resultado = Desempeno::getListaEnObjetos("idDesempeno={$persona->getIdentificacion()} and $filtroPeriodoDesempeno", null);
 
 for ($i = 0; $i < count($resultado); $i++) {
     $desempeno = $resultado[$i];
@@ -52,7 +55,7 @@ for ($i = 0; $i < count($resultado); $i++) {
 
     //$lista .= "<td>{$desempeno->getRango()}</td>";
     $lista .= '<td>';
-    $lista .= "<a href='principal.php?CONTENIDO=presentacion/evaluacion/evaluacionFormulario.php&accion=Modificar&id={$desempeno->getId()}'><img src='presentacion/img/modificar.png'></a>";
+    $lista .= "<a href='principal.php?CONTENIDO=presentacion/evaluacion/evaluacionFormulario.php&accion=Modificar&id={$desempeno->getId()}&idEvaluacionDesempeno=$idEvaluacionDesempeno'><img src='presentacion/img/modificar.png'></a>";
     $lista .= "<img src='presentacion/img/eliminar.png' onClick='eliminar({$desempeno->getId()})'>";
     $lista .= '</td>';
     $lista .= '</tr>';
@@ -60,7 +63,7 @@ for ($i = 0; $i < count($resultado); $i++) {
 
 $cal2 = 0;
 
-$resultado = EvaluacionCompetencia::getListaEnObjetos("idPersona={$persona->getIdentificacion()}", 'id');
+$resultado = EvaluacionCompetencia::getListaEnObjetos("idPersona={$persona->getIdentificacion()} and $filtroPeriodoCompetencia", 'id');
 for ($i = 0; $i < count($resultado); $i++) {
     $evaluacion = $resultado[$i];
     $lista2 .= '<tr>';
@@ -87,7 +90,7 @@ for ($i = 0; $i < count($resultado); $i++) {
 
     //$lista2 .= "<td>{$evaluacion->getRango2()}</td>";
     $lista2 .= '<td>';
-    $lista2 .= "<a href='principal.php?CONTENIDO=presentacion/evaluacion/evaluacionCompetenciaFormulario.php&accion=Modificar&id={$evaluacion->getId()}'><img src='presentacion/img/modificar.png'></a>";
+    $lista2 .= "<a href='principal.php?CONTENIDO=presentacion/evaluacion/evaluacionCompetenciaFormulario.php&accion=Modificar&id={$evaluacion->getId()}&idEvaluacionDesempeno=$idEvaluacionDesempeno'><img src='presentacion/img/modificar.png'></a>";
     $lista2 .= "<img src='presentacion/img/eliminar.png' onClick='eliminar2({$evaluacion->getId()})'>";
 
     $lista2 .= '</td>';
@@ -136,7 +139,7 @@ for ($i = 0; $i < count($resultado); $i++) {
         <td>EVIDENCIA</td>
         <td>CALIFICACION</td>
 
-        <th><a href='principal.php?CONTENIDO=presentacion/evaluacion/evaluacionFormulario.php&idDesempeno={$persona->getIdentificacion()}'><img src='presentacion/img/adicionar.png'></a></th>
+        <th><a href='principal.php?CONTENIDO=presentacion/evaluacion/evaluacionFormulario.php&idDesempeno={$persona->getIdentificacion()}&idEvaluacionDesempeno=$idEvaluacionDesempeno'><img src='presentacion/img/adicionar.png'></a></th>
         </tr>
         $lista
         </table>";
@@ -196,7 +199,7 @@ for ($i = 0; $i < count($resultado); $i++) {
                         <td>EVAL. CAL 2 (30%)</td>
                         <td>AUTO (10%)</td>
                         <td>PROMEDIO</td>
-                        <th><a href='principal.php?CONTENIDO=presentacion/evaluacion/evaluacionCompetenciaFormulario.php&idPersona={$persona->getIdentificacion()}'><img src='presentacion/img/adicionar.png'></a></th>
+                        <th><a href='principal.php?CONTENIDO=presentacion/evaluacion/evaluacionCompetenciaFormulario.php&idPersona={$persona->getIdentificacion()}&idEvaluacionDesempeno=$idEvaluacionDesempeno'><img src='presentacion/img/adicionar.png'></a></th>
                         $lista2 
                      </table>";
                 } else {
@@ -224,6 +227,14 @@ for ($i = 0; $i < count($resultado); $i++) {
 
 
                 $resultadoFinal = (($div * 60) / 100) + (($div2 * 40) / 100);
+                if ($idEvaluacionDesempeno != '') {
+                    $evaluacionPeriodo = new EvaluacionDesempeno(null, null);
+                    $evaluacionPeriodo->setId($idEvaluacionDesempeno);
+                    $evaluacionPeriodo->setResultadoDesempeno($resultDesempeno);
+                    $evaluacionPeriodo->setResultadoCompetencia($div2);
+                    $evaluacionPeriodo->setResultadoFinal($resultadoFinal);
+                    $evaluacionPeriodo->actualizarResultados();
+                }
 
 
                 if ($resultadoFinal  <= 79) {
@@ -273,11 +284,11 @@ for ($i = 0; $i < count($resultado); $i++) {
                 <script type="text/javascript">
                     function eliminar2(id) {
                         var respuesta = confirm("Esta seguro de eliminar este registro");
-                        if (respuesta) location = "principal.php?CONTENIDO=presentacion/evaluacion/evaluacionCompetenciaActualizar.php&accion=Eliminar&idDesempeno=<?= $persona->getIdentificacion() ?>&id=" + id;;
+                        if (respuesta) location = "principal.php?CONTENIDO=presentacion/evaluacion/evaluacionCompetenciaActualizar.php&accion=Eliminar&idDesempeno=<?= $persona->getIdentificacion() ?>&idEvaluacionDesempeno=<?= $idEvaluacionDesempeno ?>&id=" + id;;
                     }
 
                     function eliminar(id) {
                         var respuesta = confirm("Esta seguro de eliminar este registro");
-                        if (respuesta) location = "principal.php?CONTENIDO=presentacion/evaluacion/evaluacionActualizar.php&accion=Eliminar&idDesempeno=<?= $persona->getIdentificacion() ?>&id=" + id;
+                        if (respuesta) location = "principal.php?CONTENIDO=presentacion/evaluacion/evaluacionActualizar.php&accion=Eliminar&idDesempeno=<?= $persona->getIdentificacion() ?>&idEvaluacionDesempeno=<?= $idEvaluacionDesempeno ?>&id=" + id;
                     }
                 </script>

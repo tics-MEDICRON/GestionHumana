@@ -43,5 +43,5 @@ if (isset($_REQUEST['id'])) {
 
   <input type="hidden" name="id" value="<?= $directorio->getId() ?>" />
   <button type="submit" name="accion" class="btn btn-success" value="<?= $titulo ?>"><?= $titulo ?></button>
-  <button type="submit" name="accion" class="btn btn-danger" value="Cancelar">Cancelar</button>
+  <a class="btn btn-danger" href="principal.php?CONTENIDO=presentacion/evaluacion/historialEvaluacion.php">Cancelar</a>
 </form>

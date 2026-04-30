@@ -2,6 +2,8 @@
 @session_start();
 if (!isset($_SESSION['usuario'])) header('location: ../../index.php?mensaje=Acceso no autorizado');
 $USUARIO = unserialize($_SESSION['usuario']);
+$filtro = '';
+$buscar = isset($buscar) ? $buscar : '';
 
 
 if (isset($buscador)) {

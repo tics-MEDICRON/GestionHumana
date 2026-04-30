@@ -12,6 +12,7 @@ switch ($_REQUEST['accion']) {
                 $academica->setEvaluador($_REQUEST['evaluador']);
                 $academica->setCalificacion($_REQUEST['calificacion']);
                 $academica->setIdDesempeno($_REQUEST['idDesempeno']);
+                if (isset($_REQUEST['idEvaluacionDesempeno'])) $academica->setIdEvaluacionDesempeno($_REQUEST['idEvaluacionDesempeno']);
 
                 if ($_REQUEST['calificacion']  <= 79) {
                         $mensaje = 'NO CUMPLE';
@@ -40,6 +41,7 @@ switch ($_REQUEST['accion']) {
                 $academica->setEvaluador($_REQUEST['evaluador']);
                 $academica->setCalificacion($_REQUEST['calificacion']);
                 $academica->setIdDesempeno($_REQUEST['idDesempeno']);
+                if (isset($_REQUEST['idEvaluacionDesempeno'])) $academica->setIdEvaluacionDesempeno($_REQUEST['idEvaluacionDesempeno']);
 
                 if ($_REQUEST['calificacion']  <= 79) {
                         $mensaje = 'NO CUMPLE';
@@ -64,4 +66,5 @@ switch ($_REQUEST['accion']) {
                 break;
 }
 
-header('location: principal.php?CONTENIDO=presentacion/evaluacion/evaluacionDesempeno.php&idDesempeno=' . $_REQUEST['idDesempeno']);
+$periodo = isset($_REQUEST['idEvaluacionDesempeno']) && $_REQUEST['idEvaluacionDesempeno'] != '' ? '&idEvaluacionDesempeno=' . $_REQUEST['idEvaluacionDesempeno'] : '';
+header('location: principal.php?CONTENIDO=presentacion/evaluacion/evaluacionDesempeno.php&idDesempeno=' . $_REQUEST['idDesempeno'] . $periodo);

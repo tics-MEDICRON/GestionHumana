@@ -1,3 +1,11 @@
+<?php
+$USUARIO = $USUARIO ?? null;
+
+if (!is_object($USUARIO) || !method_exists($USUARIO, 'getTipoEnObjeto')) {
+  return;
+}
+?>
+
 <div class="welcome-shell">
   <div class="welcome-hero">
     <div class="welcome-hero__icon">
@@ -6,7 +14,7 @@
     <span class="welcome-kicker">Kit de herramientas</span>
     <h1>Bienvenido al sistema de gesti&oacute;n humana</h1>
     <p>Accede a las herramientas necesarias para gestionar el talento humano de Medicron. Selecciona una opci&oacute;n del men&uacute; lateral para comenzar.</p>
-    <span class="welcome-badge">V 1.2.1</span>
+    <span class="welcome-badge">V 1.2.2</span>
   </div>
 
   <div class="welcome-summary">
