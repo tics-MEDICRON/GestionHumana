@@ -17,6 +17,7 @@ class EvaluacionCompetencia
     private $promedio;
     private $rango2;
     private $idPersona;
+    private $idEvaluacionDesempeno;
 
 
 
@@ -24,7 +25,7 @@ class EvaluacionCompetencia
     {
         if ($campo != null) {
             if (!is_array($campo)) {
-                $cadenaSQL = "select id, tipoLogro, adecuacion, evaluador2, evaluadorCal2, evaluador3, evaluadorCal3, autoEvaluador, promedio, rango2, idPersona, idConducta,idCompetencia from evaluacioncompetencia where $campo= $valor";
+                $cadenaSQL = "select id, tipoLogro, adecuacion, evaluador2, evaluadorCal2, evaluador3, evaluadorCal3, autoEvaluador, promedio, rango2, idPersona, idConducta,idCompetencia, idEvaluacionDesempeno from evaluacioncompetencia where $campo= $valor";
                 $campo = ConectorBD::ejecutaryQuery($cadenaSQL)[0];
             }
             $this->id = $campo['id'];
@@ -40,6 +41,7 @@ class EvaluacionCompetencia
             $this->idPersona = $campo['idPersona'];
             $this->idConducta = $campo['idConducta'];
             $this->idCompetencia = $campo['idCompetencia'];
+            $this->idEvaluacionDesempeno = isset($campo['idEvaluacionDesempeno']) ? $campo['idEvaluacionDesempeno'] : null;
         }
     }
 
@@ -96,6 +98,10 @@ class EvaluacionCompetencia
     {
         return $this->idCompetencia;
     }
+    public function getIdEvaluacionDesempeno()
+    {
+        return $this->idEvaluacionDesempeno;
+    }
     public function setId($id): void
     {
         $this->id = $id;
@@ -149,6 +155,10 @@ class EvaluacionCompetencia
     {
         $this->idCompetencia = $idCompetencia;
     }
+    public function setIdEvaluacionDesempeno($idEvaluacionDesempeno): void
+    {
+        $this->idEvaluacionDesempeno = $idEvaluacionDesempeno;
+    }
 
     public function getPersona()
     {
@@ -157,13 +167,15 @@ class EvaluacionCompetencia
 
     public function guardar()
     {
-        $cadenaSQL = "insert into evaluacioncompetencia(tipoLogro, adecuacion, evaluador2,evaluadorCal2, evaluador3,evaluadorCal3,autoEvaluador, promedio, rango2, idPersona, idConducta,idCompetencia) values ('$this->tipoLogro','$this->adecuacion','$this->evaluador2','$this->evaluadorCal2','$this->evaluador3','$this->evaluadorCal3','$this->autoEvaluador','$this->promedio','$this->rango2','$this->idPersona','$this->idConducta','$this->idCompetencia')";
+        $idEvaluacion = $this->idEvaluacionDesempeno == null || $this->idEvaluacionDesempeno == '' ? 'NULL' : "'$this->idEvaluacionDesempeno'";
+        $cadenaSQL = "insert into evaluacioncompetencia(tipoLogro, adecuacion, evaluador2,evaluadorCal2, evaluador3,evaluadorCal3,autoEvaluador, promedio, rango2, idPersona, idConducta,idCompetencia, idEvaluacionDesempeno) values ('$this->tipoLogro','$this->adecuacion','$this->evaluador2','$this->evaluadorCal2','$this->evaluador3','$this->evaluadorCal3','$this->autoEvaluador','$this->promedio','$this->rango2','$this->idPersona','$this->idConducta','$this->idCompetencia', $idEvaluacion)";
         //echo $cadenaSQL;
         ConectorBD::ejecutaryQuery($cadenaSQL);
     }
     public function modificar()
     {
-        $cadenaSQL = "update evaluacioncompetencia set tipoLogro='$this->tipoLogro',adecuacion='$this->adecuacion',evaluador2='$this->evaluador2',evaluadorCal2='$this->evaluadorCal2',evaluador3='$this->evaluador3',evaluadorCal3='$this->evaluadorCal3',autoEvaluador='$this->autoEvaluador',promedio='$this->promedio',rango2='$this->rango2', idPersona='$this->idPersona',idconducta='$this->idConducta',idCompetencia='$this->idCompetencia' where id='$this->id'";
+        $idEvaluacion = $this->idEvaluacionDesempeno == null || $this->idEvaluacionDesempeno == '' ? 'NULL' : "'$this->idEvaluacionDesempeno'";
+        $cadenaSQL = "update evaluacioncompetencia set tipoLogro='$this->tipoLogro',adecuacion='$this->adecuacion',evaluador2='$this->evaluador2',evaluadorCal2='$this->evaluadorCal2',evaluador3='$this->evaluador3',evaluadorCal3='$this->evaluadorCal3',autoEvaluador='$this->autoEvaluador',promedio='$this->promedio',rango2='$this->rango2', idPersona='$this->idPersona',idconducta='$this->idConducta',idCompetencia='$this->idCompetencia', idEvaluacionDesempeno=$idEvaluacion where id='$this->id'";
         ConectorBD::ejecutaryQuery($cadenaSQL);
     }
     public function eliminar()
@@ -178,7 +190,7 @@ class EvaluacionCompetencia
         else $filtro = "where $filtro";
         if ($orden == null || $orden == '') $orden = '';
         else $orden = "order by $orden";
-        $cadenaSQL = "select evaluacioncompetencia.id, competencia.descripcion as idCompetencia, idConducta, tipoLogro, adecuacion, evaluador2, evaluadorCal2, evaluador3,evaluadorCal3,autoEvaluador, promedio, rango2, idPersona from evaluacioncompetencia INNER JOIN competencia on evaluacioncompetencia.idCompetencia = competencia.id $filtro $orden";
+        $cadenaSQL = "select evaluacioncompetencia.id, competencia.descripcion as idCompetencia, idConducta, tipoLogro, adecuacion, evaluador2, evaluadorCal2, evaluador3,evaluadorCal3,autoEvaluador, promedio, rango2, idPersona, idEvaluacionDesempeno from evaluacioncompetencia INNER JOIN competencia on evaluacioncompetencia.idCompetencia = competencia.id $filtro $orden";
         return ConectorBD::ejecutaryQuery($cadenaSQL);
     }
     public static function getLIstaEnObjetos($filtro, $orden)

@@ -32,6 +32,7 @@ switch ($_REQUEST['accion']) {
 
                 $academica->setRango2($mensaje);
                 $academica->setIdPersona($_REQUEST['idDesempeno']);
+                if (isset($_REQUEST['idEvaluacionDesempeno'])) $academica->setIdEvaluacionDesempeno($_REQUEST['idEvaluacionDesempeno']);
                 $academica->guardar();
                 break;
 
@@ -62,6 +63,7 @@ switch ($_REQUEST['accion']) {
 
                 $academica->setRango2($mensaje);
                 $academica->setIdPersona($_REQUEST['idDesempeno']);
+                if (isset($_REQUEST['idEvaluacionDesempeno'])) $academica->setIdEvaluacionDesempeno($_REQUEST['idEvaluacionDesempeno']);
                 $academica->modificar();
                 break;
         case 'Eliminar':
@@ -70,4 +72,5 @@ switch ($_REQUEST['accion']) {
                 break;
 }
 
-header('location: principal.php?CONTENIDO=presentacion/evaluacion/evaluacionDesempeno.php&idDesempeno=' . $_REQUEST['idDesempeno']);
+$periodo = isset($_REQUEST['idEvaluacionDesempeno']) && $_REQUEST['idEvaluacionDesempeno'] != '' ? '&idEvaluacionDesempeno=' . $_REQUEST['idEvaluacionDesempeno'] : '';
+header('location: principal.php?CONTENIDO=presentacion/evaluacion/evaluacionDesempeno.php&idDesempeno=' . $_REQUEST['idDesempeno'] . $periodo);

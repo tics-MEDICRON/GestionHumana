@@ -137,6 +137,7 @@ a {
   opacity: 1;
   color: #1a8fe7;
   background: linear-gradient(45deg, #9fdfff, #1a8fe7);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -218,6 +219,7 @@ a {
 .menu ol li .sub-menu .menu-item a:hover span {
   color: #1a8fe7;
   background: linear-gradient(45deg, #9fdfff, #1a8fe7);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
