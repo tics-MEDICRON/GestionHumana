@@ -8,9 +8,10 @@ if ($USUARIO->getTipoEnObjeto() != 'Administrador') {
 }
 
 $filtro = '';
-$buscar = isset($buscar) ? $buscar : '';
+$buscar = isset($buscar) ? trim($buscar) : '';
 if (isset($buscador)) {
-    $filtro = "descripcion like '%" . strtoupper($buscar) . "%' or criterio like '%" . strtoupper($buscar) . "%'";
+    $buscarSeguro = str_replace("'", "''", strtoupper($buscar));
+    $filtro = "descripcion like '%$buscarSeguro%' or criterio like '%$buscarSeguro%'";
 }
 
 $lista = '';
@@ -40,7 +41,7 @@ for ($i = 0; $i < count($resultado); $i++) {
   <form method="post" action="principal.php?CONTENIDO=presentacion/evaluacion/competencias.php" class="toolbar-search">
     <div class="toolbar-search__field">
       <i class="ion ion-md-search"></i>
-      <input class="form-control" type="text" name="buscar" id="buscar" placeholder="Buscar competencia o criterio">
+      <input class="form-control" type="text" name="buscar" id="buscar" value="<?= htmlspecialchars($buscar, ENT_QUOTES, 'UTF-8') ?>" placeholder="Buscar competencia o criterio">
     </div>
     <button class="toolbar-search__button" name="buscador" id="buscador" type="submit" value="Buscar">Buscar</button>
   </form>

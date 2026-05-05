@@ -1,114 +1,66 @@
 <?php
 @session_start();
 if (!isset($_SESSION['usuario'])) header('location: ../../index.php?mensaje=Acceso no autorizado');
+
 $USUARIO = unserialize($_SESSION['usuario']);
-$filtro = '';
-$buscar = isset($buscar) ? $buscar : '';
-
-
-if (isset($buscador)) {
-    if (is_numeric($buscar)) {
-        $filtro = "fecha like '%" . strtoupper($buscar) . "%'";
-    } else {
-        $filtro = "fecha like '%" . strtoupper($buscar) . "%'";
-    }
-}
-
-$lista = '';
 
 if ($USUARIO->getTipoEnObjeto() == "Colaborador") {
-    $resultado = HistorialEvaluacion::getListaEnObjetos("concat(nombres,' ',apellidos) = '$USUARIO'", null);
-    for ($i = 0; $i < count($resultado); $i++) {
-        $academica = $resultado[$i];
-        $lista .= '<tr>';
-        $lista .= "<td>{$academica->getId()}</td>";
-        $lista .= "<td>{$academica->getIdPersona()}</td>";
-        $lista .= "<td>{$academica->getFecha()}</td>";
-        $lista .= "<td><a href='presentacion/evaluacion/documentos/{$academica->getEvaluacionPdf()}' target='_blank' title='Ver su certficado'><img src='presentacion/img/pdf.png'></a></td>";
-        $lista .= '</tr>';
-    }
-} else {
-
-    $resultado = HistorialEvaluacion::getListaEnObjetos($filtro, null);
-    for ($i = 0; $i < count($resultado); $i++) {
-        $academica = $resultado[$i];
-        $lista .= '<tr>';
-        $lista .= "<td>{$academica->getId()}</td>";
-        $lista .= "<td>{$academica->getIdPersona()}</td>";
-        $lista .= "<td>{$academica->getFecha()}</td>";
-        $lista .= "<td><a href='presentacion/evaluacion/documentos/{$academica->getEvaluacionPdf()}' target='_blank' title='Ver su certficado'><img src='presentacion/img/pdf.png'></a></td>";
-        $lista .= '<td>';
-        $lista .= "<a href='principal.php?CONTENIDO=presentacion/evaluacion/historialFormulario.php&accion=Modificar&id={$academica->getId()}'><img src='presentacion/img/modificar.png'></a>";
-        $lista .= "<img src='presentacion/img/eliminar.png' onClick='eliminar({$academica->getId()})'>";
-        $lista .= '</td>';
-        $lista .= '</tr>';
-    }
+    $_REQUEST['idPersona'] = $USUARIO->getIdentificacion();
+    include 'presentacion/evaluacion/historialArchivos.php';
+    return;
 }
 
+$filtro = '';
+$buscar = isset($buscar) ? trim($buscar) : '';
+
+if (isset($buscador) && $buscar != '') {
+    $buscarSeguro = str_replace("'", "''", strtoupper($buscar));
+    $filtro = "upper(persona.identificacion) like '%$buscarSeguro%' or upper(persona.nombres) like '%$buscarSeguro%' or upper(persona.apellidos) like '%$buscarSeguro%'";
+}
+
+$resultado = HistorialEvaluacion::getResumenPorPersona($filtro, null);
+$lista = '';
+
+for ($i = 0; $i < count($resultado); $i++) {
+    $persona = $resultado[$i];
+    $idPersona = $persona['identificacion'];
+    $nombreCompleto = $persona['nombres'] . ' ' . $persona['apellidos'];
+    $totalArchivos = $persona['totalArchivos'];
+    $ultimaFecha = $persona['ultimaFecha'] != '' ? $persona['ultimaFecha'] : 'Sin archivos';
+
+    $lista .= '<tr>';
+    $lista .= "<td>{$idPersona}</td>";
+    $lista .= "<td>{$nombreCompleto}</td>";
+    $lista .= "<td>{$totalArchivos}</td>";
+    $lista .= "<td>{$ultimaFecha}</td>";
+    $lista .= '<td>';
+    $lista .= "<a class='btn btn-sm btn-info' href='principal.php?CONTENIDO=presentacion/evaluacion/historialArchivos.php&idPersona={$idPersona}'>Ver archivos</a>";
+    $lista .= '</td>';
+    $lista .= '</tr>';
+}
 
 ?>
-</br>
 
 <center>
-    <h1>HISTORIAL DE EVALUACIONES DE DESEMPEÑO </h1>
-    <center>
+    <h1>HISTORIAL DE EVALUACIONES DE DESEMPE&Ntilde;O</h1>
+</center>
 
-        </br>
+<br>
 
-        <?php
-        if ($USUARIO->getTipoEnObjeto() == "Colaborador") {
-        } else {
+<form method="post" action="principal.php?CONTENIDO=presentacion/evaluacion/historialEvaluacion.php" class="d-flex">
+    <input class="form-control me-sm-3" type="text" name="buscar" id="buscar" value="<?= htmlspecialchars($buscar, ENT_QUOTES, 'UTF-8') ?>" placeholder="Buscador" title="Ingrese el valor que desea buscar y presione el boton buscar">
+    <button class="btn btn-secondary my-2 my-sm-0" name="buscador" id="buscador" type="submit" value="Buscar">Buscar</button>
+</form>
 
-            echo "<form method='post' action'principal.php?CONTENIDO=presentacion/evaluacion/historialEvaluacion.php' class='d-flex'>
-           <input class='form-control me-sm-3' type='text' name='buscar' id='buscar' placeholder='Buscador' title='Ingrese el valor que desea buscar y presione el boton buscar'>
-            <button class='btn btn-secondary my-2 my-sm-0' name='buscador' id='buscador' type='submit' value='Buscar'>Buscar</button>
-    </form>";
-        }
-        ?>
+<br>
 
-
-        <br>
-
-        <?php
-        if ($USUARIO->getTipoEnObjeto() == "Colaborador") {
-
-            echo "<table class='table table-hover'>
-        <tr class='table-success'>
-          <th scope='row'>ID</th>
-          <td>PERSONA</td>
-          <td>FECHA</td>
-          <td>EVALUACIÓN DESEMPEÑO</td>
-        </tr>
-        $lista
-        
-        </table>";
-        } else {
-            echo "<table class='table table-hover'>
-        <tr class='table-success'>
-        <th scope='row'>ID</th>
+<table class="table table-hover">
+    <tr class="table-success">
+        <th scope="row">IDENTIFICACION</th>
         <td>PERSONA</td>
-        <td>FECHA</td>
-        <td>EVALUACIÓN DESEMPEÑO</td>
-        
-        <th><a href='principal.php?CONTENIDO=presentacion/evaluacion/historialFormulario.php'><img src='presentacion/img/adicionar.png'></a></th>
-        </tr>
-
-      
-        $lista
-        
-        </table>";
-        }
-
-
-        ?>
-
-
-        <!--<button type="button" name="accion" class="btn btn-success" onclick="location='principal.php?CONTENIDO=presentacion/hojaDeVida/referenciasLaborales.php'" >Siguiente</button>
-<button type="button" class="btn btn-danger" value="Cancelar" onclick="location='principal.php?CONTENIDO=presentacion/hojaDeVida/hvDatosActualizarComplementaria.php'">Cancelar</button>  -->
-
-        <script type="text/javascript">
-            function eliminar(id) {
-                var respuesta = confirm("Esta seguro de eliminar este registro");
-                if (respuesta) location = "principal.php?CONTENIDO=presentacion/evaluacion/historialActualizar.php&accion=Eliminar&id=" + id;
-            }
-        </script>
+        <td>ARCHIVOS</td>
+        <td>ULTIMA FECHA</td>
+        <td>ACCIONES</td>
+    </tr>
+    <?= $lista ?>
+</table>

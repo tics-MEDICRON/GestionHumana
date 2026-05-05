@@ -4,6 +4,27 @@
 if (!isset($_SESSION['usuario'])) header('location: ../../index.php?mensaje=Acceso no autorizado');
 $mensaje = '';
 $academica = new Desempeno(null, null);
+$ruta = 'presentacion/evaluacion';
+
+function guardarEvidenciaDesempeno($archivo, $idDesempeno, $logro, $calificacion)
+{
+        global $ruta;
+
+        if (!isset($archivo['tmp_name']) || $archivo['error'] !== UPLOAD_ERR_OK) return '';
+
+        $extension = strtolower(pathinfo($archivo['name'], PATHINFO_EXTENSION));
+        if ($extension == '') $extension = 'pdf';
+
+        $nombreArchivo = $idDesempeno . '_' . $logro . '_' . $calificacion;
+        $nombreArchivo = preg_replace('/[^A-Za-z0-9._-]/', '', str_replace(' ', '', $nombreArchivo));
+        $nombreArchivo .= '_' . uniqid() . '.' . $extension;
+
+        if (!is_dir("$ruta/documentos")) mkdir("$ruta/documentos", 0777, true);
+        if (!move_uploaded_file($archivo['tmp_name'], "$ruta/documentos/$nombreArchivo")) return '';
+
+        return $nombreArchivo;
+}
+
 switch ($_REQUEST['accion']) {
         case 'Adicionar':
                 $academica->setLogro($_REQUEST['logro']);
@@ -23,11 +44,7 @@ switch ($_REQUEST['accion']) {
                 }
                 $academica->setRango($mensaje);
 
-                $nombreArchivo = $_REQUEST['idDesempeno'] . '_' . $_REQUEST['logro']. '_' . $_REQUEST['calificacion'];
-                $cadena =str_replace(' ', '', $nombreArchivo);
-                $ruta = 'presentacion/evaluacion';
-                move_uploaded_file($_FILES['evidencia']['tmp_name'], "$ruta/documentos/$cadena.pdf");
-                $academica->setEvidencia($cadena . '.pdf');
+                $academica->setEvidencia(guardarEvidenciaDesempeno($_FILES['evidencia'], $_REQUEST['idDesempeno'], $_REQUEST['logro'], $_REQUEST['calificacion']));
                 $academica->guardar();
                 break;
 
@@ -52,11 +69,12 @@ switch ($_REQUEST['accion']) {
                 }
                 $academica->setRango($mensaje);
 
-                $nombreArchivo = $_REQUEST['idDesempeno'] . '_' . $_REQUEST['tipo'];
-                $ruta = 'presentacion/evaluacion';
-                move_uploaded_file($_FILES['evidencia']['tmp_name'], "$ruta/documentos/$nombreArchivo.pdf");
+                $actual = new Desempeno('id', $_REQUEST['id']);
+                $nombreArchivo = $actual->getEvidencia();
+                $nuevoArchivo = guardarEvidenciaDesempeno($_FILES['evidencia'], $_REQUEST['idDesempeno'], $_REQUEST['logro'], $_REQUEST['calificacion']);
+                if ($nuevoArchivo != '') $nombreArchivo = $nuevoArchivo;
 
-                $academica->setEvidencia($nombreArchivo . '.pdf');
+                $academica->setEvidencia($nombreArchivo);
                 $academica->modificar();
                 break;
 

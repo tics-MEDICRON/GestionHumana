@@ -31,7 +31,13 @@ for ($i = 0; $i < count($resultado); $i++) {
     $lista .= "<td>{$desempeno->getTipo()}</td>";
     $lista .= "<td>{$desempeno->getPeso()}%</td>";
     $lista .= "<td>{$desempeno->getEvaluador()}</td>";
-    $lista .= "<td><a href='presentacion/evaluacion/documentos/{$desempeno->getEvidencia()}' target='_blank' title='Ver su certficado'><img src='presentacion/img/pdf.png'></a></td>";
+    $evidencia = $desempeno->getEvidencia();
+    $rutaEvidencia = "presentacion/evaluacion/documentos/$evidencia";
+    if ($evidencia != '' && file_exists($rutaEvidencia)) {
+        $lista .= "<td><a href='$rutaEvidencia' target='_blank' title='Ver su certificado'><img src='presentacion/img/pdf.png'></a></td>";
+    } else {
+        $lista .= "<td><span title='No hay evidencia cargada'>Sin evidencia</span></td>";
+    }
     $lista .= "<td>{$desempeno->getCalificacion()}%</td>";
 
     $cal += intVal($desempeno->getCalificacion() * $desempeno->getPeso());

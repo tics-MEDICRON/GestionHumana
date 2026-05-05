@@ -94,4 +94,20 @@ class HistorialEvaluacion
         }
         return $lista;
     }
+
+    public static function getResumenPorPersona($filtro, $orden)
+    {
+        if ($filtro == null || $filtro == '') $filtro = '';
+        else $filtro = "where $filtro";
+        if ($orden == null || $orden == '') $orden = 'order by persona.nombres, persona.apellidos';
+        else $orden = "order by $orden";
+
+        $cadenaSQL = "select persona.identificacion, persona.nombres, persona.apellidos, count(historialevaluacion.id) as totalArchivos, max(historialevaluacion.fecha) as ultimaFecha
+            from persona
+            left join historialevaluacion on historialevaluacion.idPersona = persona.identificacion
+            $filtro
+            group by persona.identificacion, persona.nombres, persona.apellidos
+            $orden";
+        return ConectorBD::ejecutaryQuery($cadenaSQL);
+    }
 }

@@ -4,14 +4,11 @@ if (!isset($_SESSION['usuario'])) header('location: ../../index.php?mensaje=Acce
 $USUARIO = unserialize($_SESSION['usuario']);
 $desempeno = new Desempeno(null, null);
 $filtro = '';
-$buscar = isset($buscar) ? $buscar : '';
+$buscar = isset($buscar) ? trim($buscar) : '';
 
 if (isset($buscador)) {
-  if (is_numeric($buscar)) {
-    $filtro = "identificacion like '%" . strtoupper($buscar) . "%' or nombres = $buscar or apellidos =  $buscar";
-  } else {
-    $filtro = "identificacion like '%" . strtoupper($buscar) . "%' or nombres like '%" . strtoupper($buscar) . "%' or apellidos like '%" . strtoupper($buscar) . "%'";
-  }
+  $buscarSeguro = str_replace("'", "''", strtoupper($buscar));
+  $filtro = "identificacion like '%$buscarSeguro%' or nombres like '%$buscarSeguro%' or apellidos like '%$buscarSeguro%'";
 }
 $lista = '';
 if ($USUARIO->getTipoEnObjeto() == "Colaborador") {
@@ -61,7 +58,7 @@ if ($USUARIO->getTipoEnObjeto() == "Colaborador") {
     <form method="post" action="principal.php?CONTENIDO=presentacion/usuarios/usuarios.php" class="toolbar-search">
       <div class="toolbar-search__field">
         <i class="ion ion-md-search"></i>
-        <input class="form-control" type="text" name="buscar" id="buscar" placeholder="Buscar por identificaci&oacute;n, nombre o apellido" title="Ingresa el valor que deseas buscar y presiona el bot&oacute;n buscar">
+        <input class="form-control" type="text" name="buscar" id="buscar" value="<?= htmlspecialchars($buscar, ENT_QUOTES, 'UTF-8') ?>" placeholder="Buscar por identificaci&oacute;n, nombre o apellido" title="Ingresa el valor que deseas buscar y presiona el bot&oacute;n buscar">
       </div>
       <button class="toolbar-search__button" name="buscador" id="buscador" type="submit" value="Buscar">Buscar</button>
     </form>

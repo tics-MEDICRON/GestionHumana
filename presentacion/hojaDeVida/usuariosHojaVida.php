@@ -3,14 +3,11 @@
 if (!isset($_SESSION['usuario'])) header('location: ../../index.php?mensaje=Acceso no autorizado');
 $USUARIO = unserialize($_SESSION['usuario']);
 $filtro = '';
-$buscar = isset($buscar) ? $buscar : '';
+$buscar = isset($buscar) ? trim($buscar) : '';
 
 if (isset($buscador)) {
-  if (is_numeric($buscar)) {
-    $filtro = "identificacion like '%" . strtoupper($buscar) . "%' or nombres = $buscar or apellidos =  $buscar";
-  } else {
-    $filtro = "identificacion like '%" . strtoupper($buscar) . "%' or nombres like '%" . strtoupper($buscar) . "%' or apellidos like '%" . strtoupper($buscar) . "%'";
-  }
+  $buscarSeguro = str_replace("'", "''", strtoupper($buscar));
+  $filtro = "identificacion like '%$buscarSeguro%' or nombres like '%$buscarSeguro%' or apellidos like '%$buscarSeguro%'";
 }
 $lista = '';
 if ($USUARIO->getTipoEnObjeto() == "Colaborador") {
@@ -83,7 +80,7 @@ if ($USUARIO->getTipoEnObjeto() == "Colaborador") {
 if ($USUARIO->getTipoEnObjeto() == "Colaborador") {
 } else {
   echo "<form method='post' action='principal.php?CONTENIDO=presentacion/hojaDeVida/usuariosHojaVida.php' class='d-flex'>
-  <input class='form-control me-sm-3' type='text' name='buscar' id='buscar' placeholder='Buscador' title='Ingrese el valor que desea buscar y presione el boton buscar'>
+  <input class='form-control me-sm-3' type='text' name='buscar' id='buscar' value='" . htmlspecialchars($buscar, ENT_QUOTES, 'UTF-8') . "' placeholder='Buscador' title='Ingrese el valor que desea buscar y presione el boton buscar'>
   <button class='btn btn-secondary my-2 my-sm-0' name='buscador' id='buscador' type='submit' value='Buscar'>Buscar</button>
 </form>";
 }
