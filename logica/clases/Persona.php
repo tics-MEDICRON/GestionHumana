@@ -82,7 +82,7 @@ class Persona
 
     public function setTipo($tipo): void
     {
-        $this->tipo = $tipo;
+        $this->tipo = self::normalizarTipo($tipo);
     }
 
     public function setCargo($cargo): void
@@ -115,8 +115,18 @@ class Persona
 
     public function guardar()
     {
+        if ($this->tipo == null) {
+            throw new Exception('Tipo de usuario no valido');
+        }
         $cadenaSQL = "insert into persona (identificacion, nombres, apellidos, clave, tipo, cargo) values ('$this->identificacion','$this->nombres','$this->apellidos','$this->password','$this->tipo','$this->cargo')";
         ConectorBD::ejecutaryQuery($cadenaSQL);
+    }
+
+    public static function normalizarTipo($tipo)
+    {
+        $tipo = trim((string)$tipo);
+        $tiposPermitidos = array('Administrador', 'Colaborador', 'Contrato de Servicio');
+        return in_array($tipo, $tiposPermitidos, true) ? $tipo : null;
     }
 
     public function modificar($identificacionAnterior)

@@ -3,15 +3,20 @@
 include('../../../logica/clasesGenericas/ConectorBD.php');
 include('../../../logica/clases/Persona.php');
 $usuario = new Persona(null, null);
-$usuario = new Persona(null, null);
 $usuario->setIdentificacion($_REQUEST['identificacion']);
 $PERSONA = $_REQUEST['identificacion'];
 $PERSONA = Persona::validarIdentificacion($PERSONA);
 if ($PERSONA == null) {
+    $tipo = Persona::normalizarTipo($_REQUEST['tipo'] ?? '');
+    if ($tipo == null) {
+        header('location: RegistroUsuario.php?mensaje=Debe seleccionar un rol de usuario valido');
+        exit;
+    }
+
     $usuario->setNombres($_REQUEST['nombres']);
     $usuario->setApellidos($_REQUEST['apellidos']);
     $usuario->setPassword(md5($_REQUEST['password']));
-    $usuario->setTipo($_REQUEST['tipo']);
+    $usuario->setTipo($tipo);
     $usuario->setCargo($_REQUEST['cargo']);
     $usuario->guardar();
     header('location: ../../../index.php?mensaje2=¡Felicitaciones!, su usuario ya ha sido registrado ');
