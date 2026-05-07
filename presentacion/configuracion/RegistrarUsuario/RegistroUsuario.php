@@ -59,9 +59,9 @@ $cargosAll = $cargo->getCargos();
     <div class="form-group">
       <label for="exampleSelect1" class="form-label mt-4">ROL DE USUARIO: (*)</label>
       <select class="form-select" id="exampleSelect1" name="tipo" required>
-        <option disabled selected>Seleccione un rol de usuario</option>
-        <option>Colaborador</option>
-        <option>Contrato de Servicio</option> 
+        <option value="" disabled selected>Seleccione un rol de usuario</option>
+        <option value="Colaborador">Colaborador</option>
+        <option value="Contrato de Servicio">Contrato de Servicio</option> 
       </select>
     </div>
 
